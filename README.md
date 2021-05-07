@@ -1,6 +1,13 @@
 # MagicSquare <img alt="C#" src="https://img.shields.io/badge/c%23-%23239120.svg?&style=for-the-badge&logo=c-sharp&logoColor=white"/>
 An algorithm that determines whether a matrix is a normal magic square.
 
+## What is a Normal Magic Square?
+A normal magic square has the following properties:
+1. Number of rows = number of columns.
+2. Distinct positive integers in the range _1, 2, ..., n<sup>2<sup>_.
+3. The sum of the integers in each row, column and diagonal is equal. 
+  * **Note**: The sum is called the magic constant or magic sum of the magic square.
+
 ## Setup
 1. From the [MagicSquare](https://github.com/bryangalindo/magicsquare) repository, click **Program.cs**.
 2. Click **Raw**.
