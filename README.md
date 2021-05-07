@@ -2,7 +2,6 @@
 An algorithm that determines whether a matrix is a normal magic square.
 
 ## Normal Magic Square Properties
-A normal magic square has the following properties:
 1. Number of rows = number of columns.
 2. Distinct positive integers in the range _1, 2, ..., n<sup>2<sup>_.
 3. The sum of the integers in each row, column and diagonal is equal. 
