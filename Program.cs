@@ -2,167 +2,261 @@
 
 namespace MagicSquare
 {
-    class Program
+    public class Matrix
     {
-        static void Main(string[] args)
+        public int Rows { get; }
+        public int Columns { get; }
+        public int Size { get; }
+        public int[,] MatrixObj { get; }
+
+        public Matrix(int[,] matrix)
         {
-            int[,] matrix = new int[,] { {2, 7, 7}, {9, 5, 1}, {4, 3, 8} };
-            bool squareCheck = IsSquare(matrix);
-            bool isDistinctPositiveMatrix = ContainsDistinctPositiveIntegers(matrix);
-
-            if (squareCheck == false)
-            {
-                System.Console.WriteLine("This is not a square matrix. Please try again.");
-            }
-            else if (isDistinctPositiveMatrix == false)
-            {
-                System.Console.WriteLine("The matrix does not contain positive or distinct values.");
-            }
-            else 
-            {
-                bool check = IsMagicSquare(matrix);
-                System.Console.WriteLine(check);
-            }
-
+            MatrixObj = matrix;
+            Rows = matrix.GetLength(0);
+            Columns = matrix.GetLength(1);
+            Size = Rows * Columns;
         }
 
-        static bool IsMagicSquare(int[,] matrix)
-        {
-            bool isMagicSquare = true;
-            
-            while (isMagicSquare)
+        public bool ContainsDistinctPositiveIntegers()
+        {            
+            int[] points = this.ConvertMatrixToArray();
+            Array.Sort(points);
+
+            bool containsDistinctPositiveIntegers = true;
+
+            while (containsDistinctPositiveIntegers)
             {
-                int numRows = matrix.GetLength(0);
-
-                int[][] ascendingDiagonalPoints = GetAscendingDiagonalCoordinates(numRows);
-                int[][] descendingDiagonalPoints = GetDescendingDiagonalCoordinates(numRows);
-
-                int ascendingDiagonalSum = GetDiagonalSum(matrix, ascendingDiagonalPoints);
-                int descendingDiagonalSum = GetDiagonalSum(matrix, descendingDiagonalPoints);
-
-                var columnSums = GetAllRowOrColumnSums(matrix, 0);
-                foreach (var sum in columnSums)
+                for (int i=0; i < Size; i++)
                 {
-                    if (sum != ascendingDiagonalSum)
+                    int point = points[i];
+                    containsDistinctPositiveIntegers = this.IsPositive(point);
+
+                    if ((containsDistinctPositiveIntegers) && (i != Size-1))
                     {
-                        isMagicSquare = false;
-                        break;
+                        containsDistinctPositiveIntegers = this.IsUnique(points, i);
+                        if(containsDistinctPositiveIntegers == false)
+                        {
+                            break;
+                        }
+                    }
+                    else 
+                    {
+                        return containsDistinctPositiveIntegers;
                     }
                 }
-                break;
+            }
+            return containsDistinctPositiveIntegers;
+        }
+
+        public bool IsMagicSquare()
+        {
+            bool isMagicSquare = true;
+
+            while (isMagicSquare)
+            {
+                bool isSquare = this.IsSquare();
+
+                if (isSquare == false)
+                {
+                    return false;
+                }
+
+                bool isDistinctPositive = this.ContainsDistinctPositiveIntegers();
+
+                if (isDistinctPositive == false)
+                {
+                    return false;
+                }
+
+                int magicConstant = this.GetMagicConstant();
+
+                int[][] ascendingDiagonalCoordinates = this.GetAscendingDiagonalCoordinates();
+                int ascendingDiagonalSum = this.GetDiagonalSum(ascendingDiagonalCoordinates);
+
+                if (ascendingDiagonalSum != magicConstant)
+                {
+                    return false;
+                }
+
+                int[][] descendingDiagonalCoordinates = this.GetDescendingDiagonalCoordinates();
+                int descendingDiagonalSum = this.GetDiagonalSum(descendingDiagonalCoordinates);
+
+                if (descendingDiagonalSum != magicConstant)
+                {
+                    return false;
+                }
+
+                int[] allRowSums = this.GetAllRowOrColumnSums(0);
+
+                foreach (int sum in allRowSums)
+                {
+                    if (sum != magicConstant)
+                    {
+                        return false;
+                    }
+                }
+
+                int[] allColumnSums = this.GetAllRowOrColumnSums(1);
+
+                foreach (int sum in allColumnSums)
+                {
+                    if (sum != magicConstant)
+                    {
+                        return false;
+                    }
+                }
+                return isMagicSquare;
             }
             return isMagicSquare;
         }
 
-        static bool IsSquare(int[,] matrix)
+        public bool IsSquare()
         {
-            int numRows = matrix.GetLength(0);
-            int numColumns = matrix.GetLength(1);
-
-            if (numRows == numColumns)
+            if (Rows == Columns)
             {
                 return true;
             }
-            else{
+            else 
+            {
                 return false;
             }
         }
 
-        static bool ContainsDistinctPositiveIntegers(int[,] matrix)
-        {
-            int numRows = matrix.GetLength(0);
-            int numColumns = matrix.GetLength(1);
-            int totalIntegers = numRows * numColumns;
-
-            int[] uniqueValues = new int[totalIntegers];
-
-            bool containsDistinctPositiveIntegers = true;
-
-            for (int i=0; i < numRows; i++)
-            {   
-                for (int j=0; j < numColumns; j++)
-                {   
-                    int cellValue = matrix[i,j];
-                    int checkIndexInArray = Array.IndexOf(uniqueValues, cellValue);
-
-                    uniqueValues[i] = cellValue;
-
-                    if (cellValue <0)
-                    {
-                        containsDistinctPositiveIntegers = false;
-                    }
-
-                    if (checkIndexInArray != -1) 
-                    {
-                        containsDistinctPositiveIntegers = false;
-                    }
-
-                }
-
-            }
-            return containsDistinctPositiveIntegers;
-             
-        }
-
-        static int GetDiagonalSum(int[,] matrix, int[][] diagonalPoints)
-        {
-            int diagonalSum = 0;
-
-            foreach (int[] point in diagonalPoints)
-            {
-                diagonalSum += matrix[point[0], point[1]];
-            }
-
-            return diagonalSum;
-        }
-
-        static int[] GetAllRowOrColumnSums(int[,] matrix, int sumType)
-        {   
-            int numRows = matrix.GetLength(0);
-            int numColumns = matrix.GetLength(1);
-            
-            int[] allSums = new int[numRows];
+        public int[] GetAllRowOrColumnSums(int sumType)
+        {      
+            int[] allSums = new int[this.Rows];
 
             int sum = 0;
 
-            for (int i=0; i < numRows; i++)
+            for (int i=0; i < this.Rows; i++)
             {   
-                for (int j=0; j < numColumns; j++)
+                for (int j=0; j < this.Columns; j++)
                 {   
-                    if (sumType == 0) { sum += matrix[i,j]; }
-                    else if (sumType == 1) { sum += matrix[j,i]; }
-                    else { System.Console.WriteLine("Enter a valid sum type (e.g., 0, 1)"); }
+                    if (sumType == 0) 
+                    { 
+                        sum += this.MatrixObj[i,j]; 
+                    }
+                    else if (sumType == 1) 
+                    { 
+                        sum += this.MatrixObj[j,i]; 
+                    }
                 }
                 allSums[i] = sum;
                 sum = 0;
             }
             return allSums;
-         }
+         }  
 
-        static int[][] GetAscendingDiagonalCoordinates(int numRows)
-         {
-            int[][] ascendingDiagonalCoordinates = new int[numRows][];
-            int j = numRows - 1;
+        public int[][] GetAscendingDiagonalCoordinates()
+        {
+            int[][] ascendingDiagonalCoordinates = new int[this.Rows][];
+            int j = Rows - 1;
 
-            for (int i = 0; i < numRows; i++)
+            for (int i = 0; i < Rows; i++)
             {
                 int[] coordinate = new int[] {i,j};
                 ascendingDiagonalCoordinates[i] = coordinate;
                 j--;
             }
             return ascendingDiagonalCoordinates;
-         }
+        }
 
-        static int[][] GetDescendingDiagonalCoordinates(int numRows)
-         {
-             int[][] descendingDiagonalCoordinates = new int[numRows][];
+        public int[][] GetDescendingDiagonalCoordinates()
+        {
+            int[][] descendingDiagonalCoordinates = new int[this.Rows][];
 
-             for (int i = 0; i < numRows; i++)
-             {
-                 int[] coordinate = new int[] {i,i};
-                 descendingDiagonalCoordinates[i] = coordinate;
-             }
-             return descendingDiagonalCoordinates;
-         }      
+            for (int i = 0; i < this.Rows; i++)
+            {
+                int[] coordinate = new int[] {i,i};
+                descendingDiagonalCoordinates[i] = coordinate;
+            }
+            return descendingDiagonalCoordinates;
+        }
+
+        public int GetDiagonalSum(int[][] diagonalPoints)
+        {
+            int diagonalSum = 0;
+
+            foreach (int[] point in diagonalPoints)
+            {
+                diagonalSum += this.MatrixObj[point[0], point[1]];
+            }
+
+            return diagonalSum;
+        }
+
+        public int GetMagicConstant()
+        {
+            int i = 0;
+            int sum = 0;
+
+            for (int j=0; j < this.Columns; j++)
+            {
+                int cellValue = this.MatrixObj[i,j];
+                sum += cellValue;
+            }
+
+            return sum;
+        }    
+
+        private bool IsPositive(int i)
+        {
+            if (i <= 0)
+            {
+                return false;
+            }
+            else 
+            {
+                return true;
+            }
+        }
+
+        private bool IsUnique(int[] array, int i)
+        {
+            if (array[i] == array[i+1]) 
+            {
+                return false;
+            }
+            else 
+            {
+                return true;
+            }
+        }
+
+        private int[] ConvertMatrixToArray()
+        {
+            int[] array = new int[this.Size];
+            int counter = 0;
+
+            for (int i=0; i < this.Rows; i++)
+            {
+                for (int j=0; j < this.Columns; j++)
+                {
+                    int cellValue = this.MatrixObj[i,j];
+                    array[counter] = cellValue;
+                    counter++;
+                }
+            }
+
+            return array;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[,] magicMatrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            int[,] nonMagicMatrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
+
+            Matrix magicMatrixObj = new Matrix(magicMatrix);
+            bool isMagicSquare = magicMatrixObj.IsMagicSquare();
+            System.Console.WriteLine(isMagicSquare);
+
+            Matrix nonMagicMatrixObj = new Matrix(nonMagicMatrix);
+            bool isNotMagicSquare = nonMagicMatrixObj.IsMagicSquare();
+            System.Console.WriteLine(isNotMagicSquare);
+
+        }
     }
 }
