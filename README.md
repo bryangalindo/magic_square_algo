@@ -1,5 +1,5 @@
-# magicsquare
-Algorithm that determines whether a matrix is a normal magic square.
+# MagicSquare
+An algorithm that determines whether a matrix is a normal magic square.
 
 ## Setup
 1. Copy entire code from _Program.cs_.
