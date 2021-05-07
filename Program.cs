@@ -48,11 +48,11 @@ namespace MagicSquare
             return containsDistinctPositiveIntegers;
         }
 
-        public bool IsMagicSquare()
+        public bool IsNormalMagicSquare()
         {
-            bool isMagicSquare = true;
+            bool isNormalMagicSquare = true;
 
-            while (isMagicSquare)
+            while (isNormalMagicSquare)
             {
                 bool isSquare = this.IsSquare();
 
@@ -105,9 +105,9 @@ namespace MagicSquare
                         return false;
                     }
                 }
-                return isMagicSquare;
+                return isNormalMagicSquare;
             }
-            return isMagicSquare;
+            return isNormalMagicSquare;
         }
 
         public bool IsSquare()
@@ -246,16 +246,24 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            int[,] magicMatrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            // int[,] magicMatrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            int[,] magicMatrix = new int[,] {
+                {1, 35, 34, 3, 32, 6},
+                {30, 8, 28, 27, 11, 7},
+                {24, 23, 15, 16, 14, 19},
+                {13, 17, 21, 22, 20, 18},
+                {12, 26, 9, 10, 29, 25},
+                {31, 2, 4, 33, 5, 36},
+            };
             int[,] nonMagicMatrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
 
             Matrix magicMatrixObj = new Matrix(magicMatrix);
-            bool isMagicSquare = magicMatrixObj.IsMagicSquare();
-            System.Console.WriteLine(isMagicSquare);
+            bool isNormalMagicSquare = magicMatrixObj.IsNormalMagicSquare();
+            System.Console.WriteLine(isNormalMagicSquare);
 
             Matrix nonMagicMatrixObj = new Matrix(nonMagicMatrix);
-            bool isNotMagicSquare = nonMagicMatrixObj.IsMagicSquare();
-            System.Console.WriteLine(isNotMagicSquare);
+            bool isNotNormalMagicSquare = nonMagicMatrixObj.IsNormalMagicSquare();
+            System.Console.WriteLine(isNotNormalMagicSquare);
 
         }
     }
