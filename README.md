@@ -6,6 +6,7 @@ An algorithm that determines whether a matrix is a normal magic square.
 2. Distinct positive integers in the range _1, 2, ..., n<sup>2<sup>_.
 3. The sum of the integers in each row, column and diagonal is equal. 
   * **Note**: The sum is called the magic constant or magic sum of the magic square.
+<img alt="Magic Sqaure" width="300" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Magicsquareexample.svg/1024px-Magicsquareexample.svg.png"/>
 
 ## Setup
 1. From the [MagicSquare](https://github.com/bryangalindo/magicsquare) repository, click **Program.cs**.
