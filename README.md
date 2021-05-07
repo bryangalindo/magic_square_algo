@@ -14,5 +14,5 @@ An algorithm that determines whether a matrix is a normal magic square.
 4. Navigate to [.NET Fiddle](https://dotnetfiddle.net/ ".NET Fiddle").
 5. On the left-hand _Options_ menu, confirm the _Language_, _Project Type_, and _Compiler_ are set to _C#_, _Console_, and _.NET 5_, respectively.
 6. Clear contents from code editor area.
-7. Press **CTRL + V** on the keyboard to paste the clipboard contents.
+7. Press **CTRL + V** on the keyboard to paste the clipboard contents into the code editor area.
 8. Click **Run**.
