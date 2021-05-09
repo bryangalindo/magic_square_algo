@@ -17,37 +17,6 @@ namespace MagicSquare
             Size = Rows * Columns;
         }
 
-        public bool ContainsDistinctPositiveIntegers()
-        {            
-            int[] points = this.ConvertMatrixToArray();
-            Array.Sort(points);
-
-            bool containsDistinctPositiveIntegers = true;
-
-            while (containsDistinctPositiveIntegers)
-            {
-                for (int i=0; i < Size; i++)
-                {
-                    int point = points[i];
-                    containsDistinctPositiveIntegers = this.IsPositive(point);
-
-                    if ((containsDistinctPositiveIntegers) && (i != Size-1))
-                    {
-                        containsDistinctPositiveIntegers = this.IsUnique(points, i);
-                        if(containsDistinctPositiveIntegers == false)
-                        {
-                            break;
-                        }
-                    }
-                    else 
-                    {
-                        return containsDistinctPositiveIntegers;
-                    }
-                }
-            }
-            return containsDistinctPositiveIntegers;
-        }
-
         public bool IsNormalMagicSquare()
         {
             bool isNormalMagicSquare = true;
@@ -70,16 +39,14 @@ namespace MagicSquare
 
                 int magicConstant = this.GetMagicConstant();
 
-                int[][] ascendingDiagonalCoordinates = this.GetAscendingDiagonalCoordinates();
-                int ascendingDiagonalSum = this.GetDiagonalSum(ascendingDiagonalCoordinates);
+                int ascendingDiagonalSum = this.GetDiagonalSum(0);
 
                 if (ascendingDiagonalSum != magicConstant)
                 {
                     return false;
                 }
 
-                int[][] descendingDiagonalCoordinates = this.GetDescendingDiagonalCoordinates();
-                int descendingDiagonalSum = this.GetDiagonalSum(descendingDiagonalCoordinates);
+                int descendingDiagonalSum = this.GetDiagonalSum(1);
 
                 if (descendingDiagonalSum != magicConstant)
                 {
@@ -110,19 +77,74 @@ namespace MagicSquare
             return isNormalMagicSquare;
         }
 
-        public bool IsSquare()
-        {
-            if (Rows == Columns)
+        private bool ContainsDistinctPositiveIntegers()
+        {            
+            int[] points = this.ConvertMatrixToArray();
+            Array.Sort(points);
+
+            bool containsDistinctPositiveIntegers = true;
+
+            while (containsDistinctPositiveIntegers)
             {
-                return true;
+                for (int i=0; i < Size; i++)
+                {
+                    int point = points[i];
+                    containsDistinctPositiveIntegers = this.IsPositive(point);
+
+                    if ((containsDistinctPositiveIntegers) && (i != Size-1))
+                    {
+                        containsDistinctPositiveIntegers = this.IsUnique(points, i);
+                        if(containsDistinctPositiveIntegers == false)
+                        {
+                            break;
+                        }
+                    }
+                    else 
+                    {
+                        return containsDistinctPositiveIntegers;
+                    }
+                }
             }
-            else 
-            {
-                return false;
-            }
+            return containsDistinctPositiveIntegers;
         }
 
-        public int[] GetAllRowOrColumnSums(int sumType)
+        private int[] ConvertMatrixToArray()
+        {
+            int[] array = new int[this.Size];
+            int counter = 0;
+
+            for (int i=0; i < this.Rows; i++)
+            {
+                for (int j=0; j < this.Columns; j++)
+                {
+                    int cellValue = this.MatrixObj[i,j];
+                    array[counter] = cellValue;
+                    counter++;
+                }
+            }
+
+            return array;
+        }
+
+        private bool IsPositive(int i)
+        {
+            bool isPositive = (i > 0) ? true : false;
+            return isPositive;
+        }
+
+        private bool IsSquare()
+        {
+            bool isSquare = (this.Rows == this.Columns) ? true : false;
+            return isSquare;
+        }
+
+        private bool IsUnique(int[] array, int i)
+        {
+            bool isUnique = (array[i] != array[i+1]) ? true : false;
+            return isUnique;
+        }
+
+        private int[] GetAllRowOrColumnSums(int sumType)
         {      
             int[] allSums = new int[this.Rows];
 
@@ -147,7 +169,7 @@ namespace MagicSquare
             return allSums;
          }  
 
-        public int[][] GetAscendingDiagonalCoordinates()
+        private int[][] GetAscendingDiagonalCoordinates()
         {
             int[][] ascendingDiagonalCoordinates = new int[this.Rows][];
             int j = Rows - 1;
@@ -161,7 +183,7 @@ namespace MagicSquare
             return ascendingDiagonalCoordinates;
         }
 
-        public int[][] GetDescendingDiagonalCoordinates()
+        private int[][] GetDescendingDiagonalCoordinates()
         {
             int[][] descendingDiagonalCoordinates = new int[this.Rows][];
 
@@ -173,9 +195,10 @@ namespace MagicSquare
             return descendingDiagonalCoordinates;
         }
 
-        public int GetDiagonalSum(int[][] diagonalPoints)
+        private int GetDiagonalSum(int diagonalType)
         {
             int diagonalSum = 0;
+            int[][] diagonalPoints = (diagonalType == 0) ? this.GetAscendingDiagonalCoordinates() : this.GetDescendingDiagonalCoordinates();
 
             foreach (int[] point in diagonalPoints)
             {
@@ -185,7 +208,7 @@ namespace MagicSquare
             return diagonalSum;
         }
 
-        public int GetMagicConstant()
+        private int GetMagicConstant()
         {
             int i = 0;
             int sum = 0;
@@ -198,48 +221,6 @@ namespace MagicSquare
 
             return sum;
         }    
-
-        private bool IsPositive(int i)
-        {
-            if (i <= 0)
-            {
-                return false;
-            }
-            else 
-            {
-                return true;
-            }
-        }
-
-        private bool IsUnique(int[] array, int i)
-        {
-            if (array[i] == array[i+1]) 
-            {
-                return false;
-            }
-            else 
-            {
-                return true;
-            }
-        }
-
-        private int[] ConvertMatrixToArray()
-        {
-            int[] array = new int[this.Size];
-            int counter = 0;
-
-            for (int i=0; i < this.Rows; i++)
-            {
-                for (int j=0; j < this.Columns; j++)
-                {
-                    int cellValue = this.MatrixObj[i,j];
-                    array[counter] = cellValue;
-                    counter++;
-                }
-            }
-
-            return array;
-        }
     }
 
     class Program
