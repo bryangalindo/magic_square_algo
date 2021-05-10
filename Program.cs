@@ -19,51 +19,45 @@ namespace MagicSquare
 
         public bool IsNormalMagicSquare()
         {
-            bool isNormalMagicSquare = true;
             int magicConstant = this.GetMagicConstant();
 
-            while (isNormalMagicSquare)
+            bool isSquare = this.IsSquare();
+            if (isSquare == false)
             {
-                bool isSquare = this.IsSquare();
-                if (isSquare == false)
-                {
-                    return false;
-                }
-
-                bool isDistinctPositive = this.ContainsDistinctPositiveIntegers();
-                if (isDistinctPositive == false)
-                {
-                    return false;
-                }
-
-                int ascendingDiagonalSum = this.GetDiagonalSum(0);
-                if (ascendingDiagonalSum != magicConstant)
-                {
-                    return false;
-                }
-
-                int descendingDiagonalSum = this.GetDiagonalSum(1);
-                if (descendingDiagonalSum != magicConstant)
-                {
-                    return false;
-                }
-
-                int allRowSum = this.GetSumOfAllRowsOrAllColumns(0);
-                if ((allRowSum / this.Rows) != magicConstant)
-                {
-                    return false;
-                }
-
-                int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
-                if ((allColumnSum / this.Columns) != magicConstant)
-                {
-                    return false;
-                }
-
-                return isNormalMagicSquare;
+                return false;
             }
 
-            return isNormalMagicSquare;
+            bool isDistinctPositive = this.ContainsDistinctPositiveIntegers();
+            if (isDistinctPositive == false)
+            {
+                return false;
+            }
+
+            int ascendingDiagonalSum = this.GetDiagonalSum(0);
+            if (ascendingDiagonalSum != magicConstant)
+            {
+                return false;
+            }
+
+            int descendingDiagonalSum = this.GetDiagonalSum(1);
+            if (descendingDiagonalSum != magicConstant)
+            {
+                return false;
+            }
+
+            int allRowSum = this.GetSumOfAllRowsOrAllColumns(0);
+            if ((allRowSum / this.Rows) != magicConstant)
+            {
+                return false;
+            }
+
+            int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
+            if ((allColumnSum / this.Columns) != magicConstant)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool ContainsDistinctPositiveIntegers()
@@ -71,30 +65,24 @@ namespace MagicSquare
             int[] points = this.ConvertMatrixToArray();
             Array.Sort(points);
 
-            bool containsDistinctPositiveIntegers = true;
-
-            while (containsDistinctPositiveIntegers)
+            for (int i=0; i < Size - 1; i++)
             {
-                for (int i=0; i < Size; i++)
-                {
-                    int point = points[i];
-                    containsDistinctPositiveIntegers = this.IsPositive(point);
+                int point = points[i];
 
-                    if ((containsDistinctPositiveIntegers) && (i != Size-1))
-                    {
-                        containsDistinctPositiveIntegers = this.IsUnique(points, i);
-                        if(containsDistinctPositiveIntegers == false)
-                        {
-                            break;
-                        }
-                    }
-                    else 
-                    {
-                        return containsDistinctPositiveIntegers;
-                    }
+                bool isPositive = this.IsPositive(point);
+                if (isPositive == false)
+                {
+                    return false;
+                }
+                
+                bool isUnique = this.IsUnique(points, i);
+                if(isUnique == false)
+                {
+                    return false;
                 }
             }
-            return containsDistinctPositiveIntegers;
+
+            return true;
         }
 
         private int[] ConvertMatrixToArray()
@@ -206,16 +194,16 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
             // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
-            int[,] matrix = new int[,] {
-                {1, 35, 34, 3, 32, 6},
-                {30, 8, 28, 27, 11, 7},
-                {24, 23, 15, 16, 14, 19},
-                {13, 17, 21, 22, 20, 18},
-                {12, 26, 9, 10, 29, 25},
-                {31, 2, 4, 33, 5, 36},
-            };
+            // int[,] matrix = new int[,] {
+            //     {1, 35, 34, 3, 32, 6},
+            //     {30, 8, 28, 27, 11, 7},
+            //     {24, 23, 15, 16, 14, 19},
+            //     {13, 17, 21, 22, 20, 18},
+            //     {12, 26, 9, 10, 29, 25},
+            //     {31, 2, 4, 33, 5, 36},
+            // };
 
             Matrix matrixObj = new Matrix(matrix);
             bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
