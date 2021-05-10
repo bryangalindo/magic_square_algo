@@ -20,41 +20,35 @@ namespace MagicSquare
         public bool IsNormalMagicSquare()
         {
             bool isNormalMagicSquare = true;
+            int magicConstant = this.GetMagicConstant();
 
             while (isNormalMagicSquare)
             {
                 bool isSquare = this.IsSquare();
-
                 if (isSquare == false)
                 {
                     return false;
                 }
 
                 bool isDistinctPositive = this.ContainsDistinctPositiveIntegers();
-
                 if (isDistinctPositive == false)
                 {
                     return false;
                 }
 
-                int magicConstant = this.GetMagicConstant();
-
                 int ascendingDiagonalSum = this.GetDiagonalSum(0);
-
                 if (ascendingDiagonalSum != magicConstant)
                 {
                     return false;
                 }
 
                 int descendingDiagonalSum = this.GetDiagonalSum(1);
-
                 if (descendingDiagonalSum != magicConstant)
                 {
                     return false;
                 }
 
                 int[] allRowSums = this.GetAllRowOrColumnSums(0);
-
                 foreach (int sum in allRowSums)
                 {
                     if (sum != magicConstant)
@@ -64,7 +58,6 @@ namespace MagicSquare
                 }
 
                 int[] allColumnSums = this.GetAllRowOrColumnSums(1);
-
                 foreach (int sum in allColumnSums)
                 {
                     if (sum != magicConstant)
@@ -227,8 +220,9 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            // int[,] magicMatrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
-            int[,] magicMatrix = new int[,] {
+            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
+            int[,] matrix = new int[,] {
                 {1, 35, 34, 3, 32, 6},
                 {30, 8, 28, 27, 11, 7},
                 {24, 23, 15, 16, 14, 19},
@@ -236,16 +230,10 @@ namespace MagicSquare
                 {12, 26, 9, 10, 29, 25},
                 {31, 2, 4, 33, 5, 36},
             };
-            int[,] nonMagicMatrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
 
-            Matrix magicMatrixObj = new Matrix(magicMatrix);
-            bool isNormalMagicSquare = magicMatrixObj.IsNormalMagicSquare();
+            Matrix matrixObj = new Matrix(matrix);
+            bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
             System.Console.WriteLine(isNormalMagicSquare);
-
-            Matrix nonMagicMatrixObj = new Matrix(nonMagicMatrix);
-            bool isNotNormalMagicSquare = nonMagicMatrixObj.IsNormalMagicSquare();
-            System.Console.WriteLine(isNotNormalMagicSquare);
-
         }
     }
 }
