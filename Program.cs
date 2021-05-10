@@ -147,14 +147,7 @@ namespace MagicSquare
             {   
                 for (int j=0; j < this.Columns; j++)
                 {   
-                    if (sumType == 0) 
-                    { 
-                        sum += this.MatrixObj[i,j]; 
-                    }
-                    else if (sumType == 1) 
-                    { 
-                        sum += this.MatrixObj[j,i]; 
-                    }
+                    sum = (sumType == 0) ? sum += this.MatrixObj[i,j] : sum += this.MatrixObj[j,i];
                 }
                 allSums[i] = sum;
                 sum = 0;
