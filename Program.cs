@@ -48,25 +48,21 @@ namespace MagicSquare
                     return false;
                 }
 
-                int[] allRowSums = this.GetAllRowOrColumnSums(0);
-                foreach (int sum in allRowSums)
+                int allRowSum = this.GetSumOfAllRowsOrAllColumns(0);
+                if ((allRowSum / this.Rows) != magicConstant)
                 {
-                    if (sum != magicConstant)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
 
-                int[] allColumnSums = this.GetAllRowOrColumnSums(1);
-                foreach (int sum in allColumnSums)
+                int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
+                if ((allColumnSum / this.Columns) != magicConstant)
                 {
-                    if (sum != magicConstant)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
+
                 return isNormalMagicSquare;
             }
+
             return isNormalMagicSquare;
         }
 
@@ -137,22 +133,19 @@ namespace MagicSquare
             return isUnique;
         }
 
-        private int[] GetAllRowOrColumnSums(int sumType)
+        private int GetSumOfAllRowsOrAllColumns(int sumType)
         {      
-            int[] allSums = new int[this.Rows];
-
             int sum = 0;
 
             for (int i=0; i < this.Rows; i++)
             {   
                 for (int j=0; j < this.Columns; j++)
                 {   
-                    sum = (sumType == 0) ? sum += this.MatrixObj[i,j] : sum += this.MatrixObj[j,i];
+                    sum = (sumType == 0) ? sum + this.MatrixObj[i,j] : sum +this.MatrixObj[j,i];
                 }
-                allSums[i] = sum;
-                sum = 0;
             }
-            return allSums;
+
+            return sum;
          }  
 
         private int[][] GetAscendingDiagonalCoordinates()
