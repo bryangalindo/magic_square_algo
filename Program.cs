@@ -27,8 +27,8 @@ namespace MagicSquare
                 return false;
             }
 
-            bool isDistinctPositive = this.ContainsDistinctPositiveIntegers();
-            if (isDistinctPositive == false)
+            bool isDistinctPositiveInRange = this.ContainsDistinctPositiveInRangeIntegers();
+            if (isDistinctPositiveInRange == false)
             {
                 return false;
             }
@@ -60,12 +60,12 @@ namespace MagicSquare
             return true;
         }
 
-        private bool ContainsDistinctPositiveIntegers()
+        private bool ContainsDistinctPositiveInRangeIntegers()
         {            
             int[] points = this.ConvertMatrixToArray();
             Array.Sort(points);
 
-            for (int i=0; i < Size - 1; i++)
+            for (int i=0; i < Size; i++)
             {
                 int point = points[i];
 
@@ -77,6 +77,12 @@ namespace MagicSquare
                 
                 bool isUnique = this.IsUnique(points, i);
                 if(isUnique == false)
+                {
+                    return false;
+                }
+
+                bool isInNSquaredRange = this.IsInNSquaredRange(i);
+                if (isInNSquaredRange == false)
                 {
                     return false;
                 }
@@ -103,6 +109,12 @@ namespace MagicSquare
             return array;
         }
 
+        private bool IsInNSquaredRange(int i)
+        {
+            bool isInNSquaredRange = (i <= this.Size) ? true : false;
+            return isInNSquaredRange;
+        }
+
         private bool IsPositive(int i)
         {
             bool isPositive = (i > 0) ? true : false;
@@ -117,24 +129,16 @@ namespace MagicSquare
 
         private bool IsUnique(int[] array, int i)
         {
-            bool isUnique = (array[i] != array[i+1]) ? true : false;
-            return isUnique;
-        }
-
-        private int GetSumOfAllRowsOrAllColumns(int sumType)
-        {      
-            int sum = 0;
-
-            for (int i=0; i < this.Rows; i++)
-            {   
-                for (int j=0; j < this.Columns; j++)
-                {   
-                    sum = (sumType == 0) ? sum + this.MatrixObj[i,j] : sum +this.MatrixObj[j,i];
-                }
+            try 
+            {
+                bool isUnique = (array[i] != array[i+1]) ? true : false;
+                return isUnique;
             }
-
-            return sum;
-         }  
+            catch (IndexOutOfRangeException)
+            {
+                return true;
+            }
+        } 
 
         private int[][] GetAscendingDiagonalCoordinates()
         {
@@ -187,7 +191,22 @@ namespace MagicSquare
             }
 
             return sum;
-        }    
+        }
+
+        private int GetSumOfAllRowsOrAllColumns(int sumType)
+        {      
+            int sum = 0;
+
+            for (int i=0; i < this.Rows; i++)
+            {   
+                for (int j=0; j < this.Columns; j++)
+                {   
+                    sum = (sumType == 0) ? sum + this.MatrixObj[i,j] : sum +this.MatrixObj[j,i];
+                }
+            }
+
+            return sum;
+         }     
     }
 
     class Program
@@ -196,14 +215,6 @@ namespace MagicSquare
         {
             int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
             // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
-            // int[,] matrix = new int[,] {
-            //     {1, 35, 34, 3, 32, 6},
-            //     {30, 8, 28, 27, 11, 7},
-            //     {24, 23, 15, 16, 14, 19},
-            //     {13, 17, 21, 22, 20, 18},
-            //     {12, 26, 9, 10, 29, 25},
-            //     {31, 2, 4, 33, 5, 36},
-            // };
 
             Matrix matrixObj = new Matrix(matrix);
             bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
