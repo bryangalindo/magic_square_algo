@@ -2,6 +2,7 @@
 
 namespace MagicSquare
 {
+
     public class Matrix
     {
         public int Rows { get; }
@@ -27,7 +28,7 @@ namespace MagicSquare
                 return false;
             }
 
-            bool isDistinctPositiveInRange = this.ContainsDistinctPositiveInRangeIntegers();
+            bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
             if (isDistinctPositiveInRange == false)
             {
                 return false;
@@ -60,35 +61,32 @@ namespace MagicSquare
             return true;
         }
 
-        private bool ContainsDistinctPositiveInRangeIntegers()
-        {            
-            int[] points = this.ConvertMatrixToArray();
-            Array.Sort(points);
+        private bool ContainsUniquePositiveInRangeIntegers()
+        {   
+            bool containsUniquePositiveInRangeIntegers = true;
 
-            for (int i=0; i < Size; i++)
+            int[] elements = this.ConvertMatrixToArray();
+            Array.Sort(elements);
+
+            for (int i=0; i < this.Size; i++)
             {
-                int point = points[i];
+                int element = elements[i];
 
-                bool isPositive = this.IsPositive(point);
-                if (isPositive == false)
-                {
-                    return false;
-                }
-                
-                bool isUnique = this.IsUnique(points, i);
-                if(isUnique == false)
-                {
-                    return false;
-                }
+                bool isPositive = this.IsPositive(element);   
+                bool isUnique = this.IsUnique(i, elements);
+                bool isInNSquaredRange = this.IsInNSquaredRange(element);
 
-                bool isInNSquaredRange = this.IsInNSquaredRange(i);
-                if (isInNSquaredRange == false)
+                if (!(isPositive && isUnique && isInNSquaredRange))
                 {
-                    return false;
+                    containsUniquePositiveInRangeIntegers = false;
+                    break;
+                }
+                else
+                {
+                    containsUniquePositiveInRangeIntegers = true;
                 }
             }
-
-            return true;
+            return containsUniquePositiveInRangeIntegers;
         }
 
         private int[] ConvertMatrixToArray()
@@ -109,15 +107,15 @@ namespace MagicSquare
             return array;
         }
 
-        private bool IsInNSquaredRange(int i)
+        private bool IsInNSquaredRange(int element)
         {
-            bool isInNSquaredRange = (i <= this.Size) ? true : false;
+            bool isInNSquaredRange = (element <= this.Size) ? true : false;
             return isInNSquaredRange;
         }
 
-        private bool IsPositive(int i)
+        private bool IsPositive(int element)
         {
-            bool isPositive = (i > 0) ? true : false;
+            bool isPositive = (element > 0) ? true : false;
             return isPositive;
         }
 
@@ -127,11 +125,11 @@ namespace MagicSquare
             return isSquare;
         }
 
-        private bool IsUnique(int[] array, int i)
+        private bool IsUnique(int elementIndex, int[] elements)
         {
             try 
             {
-                bool isUnique = (array[i] != array[i+1]) ? true : false;
+                bool isUnique = (elements[elementIndex] != elements[elementIndex+1]) ? true : false;
                 return isUnique;
             }
             catch (IndexOutOfRangeException)
@@ -213,8 +211,8 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
-            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
+            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
 
             Matrix matrixObj = new Matrix(matrix);
             bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
