@@ -148,7 +148,7 @@ namespace MagicSquare
                     isNormalMagicSquare = false;
                     break;
                 }
-
+                
                 bool isSquare = Helper.IsSquareMatrix(this.MatrixObj);
                 bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
                 if (!(isSquare && isDistinctPositiveInRange))
