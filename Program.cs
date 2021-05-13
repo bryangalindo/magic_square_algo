@@ -2,22 +2,108 @@
 
 namespace MagicSquare
 {
-    public class Helpers
+    public class Helper
     {
-        public static bool IsInNSquaredRange(int element, int matrixSize)
+        public static bool IsInMatrixSizeRange(int element, int matrixSize)
         {
-            bool isInNSquaredRange;
+            bool isInMatrixSizeRange;
             if (element <= matrixSize)
             {
-                isInNSquaredRange = true;
+                isInMatrixSizeRange = true;
             }
             else
             {
-                isInNSquaredRange = false;
+                isInMatrixSizeRange = false;
             }
 
-            return isInNSquaredRange;
+            return isInMatrixSizeRange;
         }
+
+        public static bool IsPositive(int element)
+        {
+            bool isPositive;
+            if (element > 0)
+            {
+                isPositive = true;
+            }
+            else 
+            {
+                isPositive = false;
+            }
+
+            return isPositive;
+        }
+
+        public static bool IsUnique(int elementIndex, int[] elements)
+        {
+            bool isUnique = true;
+            bool isValidIndex = IsValidIndex(elementIndex, elements.Length);
+
+            if (isValidIndex)
+            {
+                if (elements[elementIndex] != elements[elementIndex+1])
+                {
+                    isUnique = true;
+                }
+                else
+                {
+                    isUnique = false;
+                }
+            }
+            return isUnique;
+        }
+
+        public static bool IsValidIndex(int elementIndex, int arraySize)
+        {
+            bool isValidIndex;
+            if (elementIndex < arraySize - 1)
+            {
+                isValidIndex = true;
+            }
+            else
+            {
+                isValidIndex = false;
+            }
+
+            return isValidIndex;
+        }
+
+        public static int[] ConvertMatrixToArray(int[,] matrix)
+        {
+            int rows = matrix.GetLength(0);
+            int columns = matrix.GetLength(1);
+            int size = rows * columns;
+
+            int[] array = new int[size];
+            int counter = 0;
+
+            for (int i=0; i < rows; i++)
+            {
+                for (int j=0; j < columns; j++)
+                {
+                    int cellValue = matrix[i,j];
+                    array[counter] = cellValue;
+                    counter++;
+                }
+            }
+            return array;
+        }
+
+        public static bool IsNonEmptyMatrix (int[,] matrix)
+        {
+            bool isNonEmptyMatrix;
+            if (matrix.Length > 0)
+            {
+                isNonEmptyMatrix = true;
+            }
+            else
+            {
+                isNonEmptyMatrix = false;
+            }
+
+            return isNonEmptyMatrix;
+        }
+
     }
 
     public class Matrix
@@ -38,10 +124,17 @@ namespace MagicSquare
         public bool IsNormalMagicSquare()
         {
             bool isNormalMagicSquare = true;
-            int magicConstant = this.GetMagicConstant();
-
             while (isNormalMagicSquare)
             {
+                bool isNonEmptyMatrix = Helper.IsNonEmptyMatrix(this.MatrixObj);
+                if (!isNonEmptyMatrix)
+                {
+                    isNormalMagicSquare = false;
+                    break;
+                }
+
+                int magicConstant = this.GetMagicConstant();
+
                 bool isSquare = this.IsSquare();
                 bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
                 if (!(isSquare && isDistinctPositiveInRange))
@@ -74,18 +167,18 @@ namespace MagicSquare
         {   
             bool containsUniquePositiveInRangeIntegers = true;
 
-            int[] elements = this.ConvertMatrixToArray();
+            int[] elements = Helper.ConvertMatrixToArray(this.MatrixObj);
             Array.Sort(elements);
 
             for (int i=0; i < this.Size; i++)
             {
                 int element = elements[i];
 
-                bool isPositive = this.IsPositive(element);   
-                bool isUnique = this.IsUnique(i, elements);
-                bool isInNSquaredRange = Helpers.IsInNSquaredRange(element, this.Size);
+                bool isPositive = Helper.IsPositive(element);   
+                bool isUnique = Helper.IsUnique(i, elements);
+                bool isInMatrixSizeRange = Helper.IsInMatrixSizeRange(element, this.Size);
 
-                if (!(isPositive && isUnique && isInNSquaredRange))
+                if (!(isPositive && isUnique && isInMatrixSizeRange))
                 {
                     containsUniquePositiveInRangeIntegers = false;
                     break;
@@ -98,47 +191,10 @@ namespace MagicSquare
             return containsUniquePositiveInRangeIntegers;
         }
 
-        private int[] ConvertMatrixToArray()
-        {
-            int[] array = new int[this.Size];
-            int counter = 0;
-
-            for (int i=0; i < this.Rows; i++)
-            {
-                for (int j=0; j < this.Columns; j++)
-                {
-                    int cellValue = this.MatrixObj[i,j];
-                    array[counter] = cellValue;
-                    counter++;
-                }
-            }
-
-            return array;
-        }
-        
-        private bool IsPositive(int element)
-        {
-            bool isPositive = (element > 0) ? true : false;
-            return isPositive;
-        }
-
         private bool IsSquare()
         {
             bool isSquare = (this.Rows == this.Columns) ? true : false;
             return isSquare;
-        }
-
-        private bool IsUnique(int elementIndex, int[] elements)
-        {
-            try 
-            {
-                bool isUnique = (elements[elementIndex] != elements[elementIndex+1]) ? true : false;
-                return isUnique;
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return true;
-            }
         } 
 
         private int[][] GetAscendingDiagonalCoordinates()
@@ -210,16 +266,70 @@ namespace MagicSquare
          }     
     }
 
+    public class Test
+    {
+        public static int[,] validMatrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+        public static int[,] emptyMatrix = new int[,] {};
+        public static int[,] nonSquareMatrix = new int[,] { {2, 7, 6}, {9, 1, 1} };
+        public static int[,] negativeElementInMatrix = new int[,] { {2, 7, 6}, {9, 5, -1}, {4, 3, 8} };
+        public static int[,] zeroElementInMatrix = new int[,] { {2, 7, 6}, {9, 5, 0}, {4, 3, 8} };
+        public static int[,] nonUniqueElementInMatrix = new int[,] { {2, 7, 6}, {9, 1, 1}, {4, 3, 8} };
+        public static int[,] outOfRangeElementInMatrix = new int[,] { {2, 7, 6}, {9, 1, 10}, {4, 3, 8} };
+
+        public static void TestMatrix(int [,] matrix)
+        {
+            Matrix matrixObj = new Matrix(matrix);
+            bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
+            System.Console.WriteLine(isNormalMagicSquare);
+        }
+
+        public static void EmptyMatrixCase()
+        {
+            TestMatrix(emptyMatrix);
+        }
+
+        public static void ValidMatrixCase()
+        {
+            TestMatrix(validMatrix);
+        }
+
+        public static void NegativeElementInMatrixCase()
+        {
+            TestMatrix(negativeElementInMatrix);
+        }
+
+        public static void NonSquareMatrixCase()
+        {
+            TestMatrix(nonSquareMatrix);
+        }
+
+        public static void ZeroElementInMatrix()
+        {
+            TestMatrix(zeroElementInMatrix);
+        }
+
+        public static void NonUniqueElementInMatrix()
+        {
+            TestMatrix(nonUniqueElementInMatrix);
+        }
+
+        public static void OutOfRangeElementInMatrix()
+        {
+            TestMatrix(outOfRangeElementInMatrix);
+        }
+
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
-            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
-
-            Matrix matrixObj = new Matrix(matrix);
-            bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
-            System.Console.WriteLine(isNormalMagicSquare);
+            Test.ValidMatrixCase();
+            Test.EmptyMatrixCase();
+            Test.NonSquareMatrixCase();
+            Test.NegativeElementInMatrixCase();
+            Test.NonUniqueElementInMatrix();
+            Test.OutOfRangeElementInMatrix();
         }
     }
 }
