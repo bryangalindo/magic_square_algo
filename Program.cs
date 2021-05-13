@@ -15,7 +15,6 @@ namespace MagicSquare
             {
                 isInMatrixSizeRange = false;
             }
-
             return isInMatrixSizeRange;
         }
 
@@ -30,7 +29,6 @@ namespace MagicSquare
             {
                 isPositive = false;
             }
-
             return isPositive;
         }
 
@@ -64,7 +62,6 @@ namespace MagicSquare
             {
                 isValidIndex = false;
             }
-
             return isValidIndex;
         }
 
@@ -100,7 +97,6 @@ namespace MagicSquare
             {
                 isNonEmptyMatrix = false;
             }
-
             return isNonEmptyMatrix;
         }
 
@@ -232,7 +228,6 @@ namespace MagicSquare
             {
                 diagonalSum += this.MatrixObj[point[0], point[1]];
             }
-
             return diagonalSum;
         }
 
@@ -246,14 +241,12 @@ namespace MagicSquare
                 int cellValue = this.MatrixObj[i,j];
                 sum += cellValue;
             }
-
             return sum;
         }
 
         private int GetSumOfAllRowsOrAllColumns(int sumType)
         {      
             int sum = 0;
-
             for (int i=0; i < this.Rows; i++)
             {   
                 for (int j=0; j < this.Columns; j++)
@@ -261,7 +254,6 @@ namespace MagicSquare
                     sum = (sumType == 0) ? sum + this.MatrixObj[i,j] : sum +this.MatrixObj[j,i];
                 }
             }
-
             return sum;
          }     
     }
@@ -317,7 +309,6 @@ namespace MagicSquare
         {
             TestMatrix(outOfRangeElementInMatrix);
         }
-
     }
 
     class Program
