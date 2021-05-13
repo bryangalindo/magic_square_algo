@@ -2,6 +2,23 @@
 
 namespace MagicSquare
 {
+    public class Helpers
+    {
+        public static bool IsInNSquaredRange(int element, int matrixSize)
+        {
+            bool isInNSquaredRange;
+            if (element <= matrixSize)
+            {
+                isInNSquaredRange = true;
+            }
+            else
+            {
+                isInNSquaredRange = false;
+            }
+
+            return isInNSquaredRange;
+        }
+    }
 
     public class Matrix
     {
@@ -20,45 +37,37 @@ namespace MagicSquare
 
         public bool IsNormalMagicSquare()
         {
+            bool isNormalMagicSquare = true;
             int magicConstant = this.GetMagicConstant();
 
-            bool isSquare = this.IsSquare();
-            if (isSquare == false)
+            while (isNormalMagicSquare)
             {
-                return false;
-            }
+                bool isSquare = this.IsSquare();
+                bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
+                if (!(isSquare && isDistinctPositiveInRange))
+                {
+                    isNormalMagicSquare = false;
+                    break;
+                }
 
-            bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
-            if (isDistinctPositiveInRange == false)
-            {
-                return false;
-            }
+                int ascendingDiagonalSum = this.GetDiagonalSum(0);
+                int descendingDiagonalSum = this.GetDiagonalSum(1);
+                if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
+                {
+                    isNormalMagicSquare = false;
+                    break;
+                }
 
-            int ascendingDiagonalSum = this.GetDiagonalSum(0);
-            if (ascendingDiagonalSum != magicConstant)
-            {
-                return false;
+                int allRowSum = this.GetSumOfAllRowsOrAllColumns(0);
+                int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
+                if (((allColumnSum / this.Columns) != magicConstant) || ((allRowSum / this.Rows) != magicConstant))
+                {
+                    isNormalMagicSquare = false;
+                    break;
+                }
+                break;
             }
-
-            int descendingDiagonalSum = this.GetDiagonalSum(1);
-            if (descendingDiagonalSum != magicConstant)
-            {
-                return false;
-            }
-
-            int allRowSum = this.GetSumOfAllRowsOrAllColumns(0);
-            if ((allRowSum / this.Rows) != magicConstant)
-            {
-                return false;
-            }
-
-            int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
-            if ((allColumnSum / this.Columns) != magicConstant)
-            {
-                return false;
-            }
-
-            return true;
+            return isNormalMagicSquare;
         }
 
         private bool ContainsUniquePositiveInRangeIntegers()
@@ -74,7 +83,7 @@ namespace MagicSquare
 
                 bool isPositive = this.IsPositive(element);   
                 bool isUnique = this.IsUnique(i, elements);
-                bool isInNSquaredRange = this.IsInNSquaredRange(element);
+                bool isInNSquaredRange = Helpers.IsInNSquaredRange(element, this.Size);
 
                 if (!(isPositive && isUnique && isInNSquaredRange))
                 {
@@ -106,13 +115,7 @@ namespace MagicSquare
 
             return array;
         }
-
-        private bool IsInNSquaredRange(int element)
-        {
-            bool isInNSquaredRange = (element <= this.Size) ? true : false;
-            return isInNSquaredRange;
-        }
-
+        
         private bool IsPositive(int element)
         {
             bool isPositive = (element > 0) ? true : false;
@@ -211,8 +214,8 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
-            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
+            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
 
             Matrix matrixObj = new Matrix(matrix);
             bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
