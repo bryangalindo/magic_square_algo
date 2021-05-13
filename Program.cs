@@ -2,6 +2,23 @@
 
 namespace MagicSquare
 {
+    public class Helpers
+    {
+        public static bool IsInNSquaredRange(int element, int matrixSize)
+        {
+            bool isInNSquaredRange;
+            if (element <= matrixSize)
+            {
+                isInNSquaredRange = true;
+            }
+            else
+            {
+                isInNSquaredRange = false;
+            }
+
+            return isInNSquaredRange;
+        }
+    }
 
     public class Matrix
     {
@@ -48,6 +65,7 @@ namespace MagicSquare
                     isNormalMagicSquare = false;
                     break;
                 }
+                break;
             }
             return isNormalMagicSquare;
         }
@@ -65,7 +83,7 @@ namespace MagicSquare
 
                 bool isPositive = this.IsPositive(element);   
                 bool isUnique = this.IsUnique(i, elements);
-                bool isInNSquaredRange = this.IsInNSquaredRange(element);
+                bool isInNSquaredRange = Helpers.IsInNSquaredRange(element, this.Size);
 
                 if (!(isPositive && isUnique && isInNSquaredRange))
                 {
@@ -96,12 +114,6 @@ namespace MagicSquare
             }
 
             return array;
-        }
-
-        private bool IsInNSquaredRange(int element)
-        {
-            bool isInNSquaredRange = (element <= this.Size) ? true : false;
-            return isInNSquaredRange;
         }
         
         private bool IsPositive(int element)
@@ -202,8 +214,8 @@ namespace MagicSquare
     {
         static void Main(string[] args)
         {
-            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
-            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
+            int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 1}, {4, 3, 8} };
+            // int[,] matrix = new int[,] { {2, 7, 6}, {9, 5, 10}, {4, 3, 8} };
 
             Matrix matrixObj = new Matrix(matrix);
             bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
