@@ -65,9 +65,9 @@ namespace MagicSquare
 
                 bool isPositive = IsPositive(element);   
                 bool isUnique = IsUnique(i, elements);
-                bool isInMatrixSizeRange = IsInMatrixSizeRange(element, size);
+                bool isInRange = IsInRange(element, size);
 
-                if (!(isPositive && isUnique && isInMatrixSizeRange))
+                if (!(isPositive && isUnique && isInRange))
                 {
                     containsUniquePositiveInRangeIntegers = false;
                     break;
@@ -80,18 +80,18 @@ namespace MagicSquare
             return containsUniquePositiveInRangeIntegers;
         }
 
-        public static bool IsInMatrixSizeRange(int element, int matrixSize)
+        public static bool IsInRange(int element, int matrixSize)
         {
-            bool isInMatrixSizeRange;
+            bool isInRange;
             if (element <= matrixSize)
             {
-                isInMatrixSizeRange = true;
+                isInRange = true;
             }
             else
             {
-                isInMatrixSizeRange = false;
+                isInRange = false;
             }
-            return isInMatrixSizeRange;
+            return isInRange;
         }
 
         public static bool IsNonEmptyMatrix (int[,] matrix)
