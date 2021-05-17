@@ -140,10 +140,9 @@ namespace MagicSquare
 
     public class Matrix
     {
-        private int magicConstant = 0;
         private int descendingDiagonalSum = 0;
         private int ascendingDiagonalSum = 0;
-        private int firstRowIndex = 0;
+        private int magicConstant;
         private int numRows;
         private int numColumns;
         private int size;
@@ -155,6 +154,7 @@ namespace MagicSquare
             numRows = matrix.GetLength(0);
             numColumns = matrix.GetLength(1);
             size = numRows * numColumns;
+            magicConstant = numRows * (size + 1) / 2;
         }
 
         public bool IsNormalMagicSquare()
@@ -168,8 +168,6 @@ namespace MagicSquare
                     isNormalMagicSquare = false;
                     break;
                 }
-
-                int magicConstant = GetMagicConstant();
 
                 int ascendingDiagonalSum = GetAscendingDiagonalSum();
                 int descendingDiagonalSum = GetDescendingDiagonalSum();
@@ -220,16 +218,6 @@ namespace MagicSquare
             return ascendingDiagonalSum;
         }
 
-        private int GetMagicConstant()
-        {
-            for (int i = 0; i < numColumns; i++)
-            {
-                int element = matrixObj[firstRowIndex, i]; // Retrieving sum of first row
-                magicConstant += element;
-            }
-            return magicConstant;
-        }
-
         private int GetSumOfAllRowsOrAllColumns(int sumType)
         {      
             int sum = 0;
@@ -270,45 +258,14 @@ namespace MagicSquare
             }
         }
 
-        public static void EmptyMatrixCase()
-        {
-            TestMatrix(emptyMatrix);
-        }
-
-        public static void ValidMatrixCase()
-        {
-            TestMatrix(validMatrix);
-        }
-
-        public static void NullMatrixCase()
-        {
-            TestMatrix(nullMatrix);
-        }
-
-        public static void NegativeElementInMatrixCase()
-        {
-            TestMatrix(negativeElementInMatrix);
-        }
-
-        public static void NonSquareMatrixCase()
-        {
-            TestMatrix(nonSquareMatrix);
-        }
-
-        public static void ZeroElementInMatrix()
-        {
-            TestMatrix(zeroElementInMatrix);
-        }
-
-        public static void NonUniqueElementInMatrixCase()
-        {
-            TestMatrix(nonUniqueElementInMatrix);
-        }
-
-        public static void OutOfRangeElementInMatrixCase()
-        {
-            TestMatrix(outOfRangeElementInMatrix);
-        }
+        public static void EmptyMatrixCase() { TestMatrix(emptyMatrix); }
+        public static void ValidMatrixCase() { TestMatrix(validMatrix); }
+        public static void NullMatrixCase() { TestMatrix(nullMatrix); }
+        public static void NegativeElementInMatrixCase() { TestMatrix(negativeElementInMatrix); }
+        public static void NonSquareMatrixCase() { TestMatrix(nonSquareMatrix); }
+        public static void ZeroElementInMatrix() { TestMatrix(zeroElementInMatrix); }
+        public static void NonUniqueElementInMatrixCase() { TestMatrix(nonUniqueElementInMatrix); }
+        public static void OutOfRangeElementInMatrixCase() { TestMatrix(outOfRangeElementInMatrix); }
     }
 
     class Program
