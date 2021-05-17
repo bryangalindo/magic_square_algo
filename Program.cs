@@ -238,6 +238,7 @@ namespace MagicSquare
                 for (int j = numColumns - 1; j >= 0; j--)
                 {
                     ascendingDiagonalSum += matrixObj[i, j];
+                    break;
                 }
             }
             return ascendingDiagonalSum;
