@@ -207,26 +207,26 @@ namespace MagicSquare
             bool isNormalMagicSquare = true;
             while (isNormalMagicSquare)
             { 
-                bool isNormalMatrix = Normalize.IsNormalMatrix(this.matrixObj);
+                bool isNormalMatrix = Normalize.IsNormalMatrix(matrixObj);
                 if (!isNormalMatrix)
                 {
                     isNormalMagicSquare = false;
                     break;
                 }
 
-                int magicConstant = this.GetMagicConstant();
+                int magicConstant = GetMagicConstant();
 
-                int ascendingDiagonalSum = this.GetAscendingDiagonalSum();
-                int descendingDiagonalSum = this.GetDescendingDiagonalSum();
+                int ascendingDiagonalSum = GetAscendingDiagonalSum();
+                int descendingDiagonalSum = GetDescendingDiagonalSum();
                 if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
                 {
                     isNormalMagicSquare = false;
                     break;
                 }
 
-                int allRowsum = this.GetSumOfAllRowsOrAllColumns(0);
-                int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
-                if (((allColumnSum / this.numColumns) != magicConstant) || ((allRowsum / this.numRows) != magicConstant))
+                int allRowsum = GetSumOfAllRowsOrAllColumns(0);
+                int allColumnSum = GetSumOfAllRowsOrAllColumns(1);
+                if (((allColumnSum / numColumns) != magicConstant) || ((allRowsum / numRows) != magicConstant))
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -238,7 +238,7 @@ namespace MagicSquare
 
         private int[][] GetAscendingDiagonalCoordinates()
         {
-            int[][] ascendingDiagonalCoordinates = new int[this.numRows][];
+            int[][] ascendingDiagonalCoordinates = new int[numRows][];
             int j = numRows - 1;
 
             for (int i = 0; i < numRows; i++)
@@ -253,13 +253,13 @@ namespace MagicSquare
         private int GetDescendingDiagonalSum()
         {
 
-            for (int i = 0; i < this.numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {
-                for (int j = 0; j < this.numColumns; j++)
+                for (int j = 0; j < numColumns; j++)
                 {
                     if (i == j)
                     {
-                        descendingDiagonalSum += this.matrixObj[i, j];
+                        descendingDiagonalSum += matrixObj[i, j];
                     }
                 }
             }
@@ -268,20 +268,20 @@ namespace MagicSquare
 
         private int GetAscendingDiagonalSum()
         {
-            int[][] diagonalCoordinates = this.GetAscendingDiagonalCoordinates();
+            int[][] diagonalCoordinates = GetAscendingDiagonalCoordinates();
 
             foreach (int[] coordinate in diagonalCoordinates)
             {
-                ascendingDiagonalSum += this.matrixObj[coordinate[0], coordinate[1]];
+                ascendingDiagonalSum += matrixObj[coordinate[0], coordinate[1]];
             }
             return ascendingDiagonalSum;
         }
 
         private int GetMagicConstant()
         {
-            for (int i = 0; i < this.numColumns; i++)
+            for (int i = 0; i < numColumns; i++)
             {
-                int element = this.matrixObj[0, i];
+                int element = matrixObj[0, i];
                 magicConstant += element;
             }
             return magicConstant;
@@ -290,11 +290,11 @@ namespace MagicSquare
         private int GetSumOfAllRowsOrAllColumns(int sumType)
         {      
             int sum = 0;
-            for (int i = 0; i < this.numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {   
-                for (int j = 0; j < this.numColumns; j++)
+                for (int j = 0; j < numColumns; j++)
                 {   
-                    sum = (sumType == 0) ? sum + this.matrixObj[i,j] : sum +this.matrixObj[j,i];
+                    sum = (sumType == 0) ? sum + matrixObj[i,j] : sum + matrixObj[j,i];
                 }
             }
             return sum;
