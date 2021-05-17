@@ -142,6 +142,8 @@ namespace MagicSquare
     {
         private int descendingDiagonalSum = 0;
         private int ascendingDiagonalSum = 0;
+        private int rowSum = 0;
+        private int columnSum = 0;
         private int magicConstant;
         private int numRows;
         private int numColumns;
@@ -177,9 +179,8 @@ namespace MagicSquare
                     break;
                 }
 
-                int allRowSum = GetSumOfAllRowsOrAllColumns(0);
-                int allColumnSum = GetSumOfAllRowsOrAllColumns(1);
-                if (((allColumnSum / numColumns) != magicConstant) || ((allRowSum / numRows) != magicConstant))
+                bool allRowsAllColumnsEqualMagicConstant = AllRowsAllColumnsEqualMagicConstant();
+                if (!allRowsAllColumnsEqualMagicConstant)
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -211,24 +212,32 @@ namespace MagicSquare
                 for (int j = numColumns - 1; j >= 0;)
                 {
                     ascendingDiagonalSum += matrixObj[i, j];
-                    j--; // Moved decrement inside the loop to avoid unreachable code linter message
+                    j--; // Moved decrement inside the loop to avoid "unreachable code" linter message
                     break;
                 }
             }
             return ascendingDiagonalSum;
-        }
+        } 
 
-        private int GetSumOfAllRowsOrAllColumns(int sumType)
+        private bool AllRowsAllColumnsEqualMagicConstant()
         {      
-            int sum = 0;
+            bool allRowsAllColumnsEqualMagicConstant = true;
             for (int i = 0; i < numRows; i++)
             {   
                 for (int j = 0; j < numColumns; j++)
                 {   
-                    sum = (sumType == 0) ? sum + matrixObj[i,j] : sum + matrixObj[j,i];
+                    rowSum += matrixObj[i,j];
+                    columnSum += matrixObj[j,i];
                 }
+                if (!(rowSum == magicConstant) || !(columnSum == magicConstant))
+                {
+                    allRowsAllColumnsEqualMagicConstant = false;
+                    break;
+                }
+                rowSum = 0; // Resets sum for next row
+                columnSum = 0; // Resets sum for next column
             }
-            return sum;
+            return allRowsAllColumnsEqualMagicConstant;
          }     
     }
 
