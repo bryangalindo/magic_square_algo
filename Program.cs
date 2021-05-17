@@ -67,12 +67,11 @@ namespace MagicSquare
 
         private static bool ContainsUniquePositiveInRangeIntegers(int[,] matrix)
         {   
-            bool containsUniquePositiveInRangeIntegers = true;
             int size = matrix.GetLength(0) * matrix.GetLength(1);
-
             int[] elements = Helper.ConvertMatrixToArray(matrix);
             Array.Sort(elements);
 
+            bool containsUniquePositiveInRangeIntegers = true;
             for (int i = 0; i < size; i++)
             {
                 int element = elements[i];
@@ -130,7 +129,7 @@ namespace MagicSquare
 
             if (isValidIndex)
             {
-                if (elements[elementIndex] == elements[elementIndex+1])
+                if (elements[elementIndex] == elements[elementIndex + 1])
                 {
                     isUnique = false;
                 }
@@ -193,7 +192,6 @@ namespace MagicSquare
 
         private int GetDescendingDiagonalSum()
         {
-
             for (int i = 0; i < numRows; i++)
             {
                 for (int j = 0; j < numColumns; j++)
