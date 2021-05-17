@@ -25,39 +25,6 @@ namespace MagicSquare
             return array;
         }
 
-        public static bool IsPositive(int element)
-        {
-            bool isPositive;
-            if (element > 0)
-            {
-                isPositive = true;
-            }
-            else 
-            {
-                isPositive = false;
-            }
-            return isPositive;
-        }
-
-        public static bool IsUnique(int elementIndex, int[] elements)
-        {
-            bool isUnique = true;
-            bool isValidIndex = IsValidIndex(elementIndex, elements.Length);
-
-            if (isValidIndex)
-            {
-                if (elements[elementIndex] != elements[elementIndex+1])
-                {
-                    isUnique = true;
-                }
-                else
-                {
-                    isUnique = false;
-                }
-            }
-            return isUnique;
-        }
-
         public static bool IsValidIndex(int elementIndex, int arraySize)
         {
             bool isValidIndex;
@@ -96,9 +63,9 @@ namespace MagicSquare
             {
                 int element = elements[i];
 
-                bool isPositive = Helper.IsPositive(element);   
-                bool isUnique = Helper.IsUnique(i, elements);
-                bool isInMatrixSizeRange = Normalize.IsInMatrixSizeRange(element, size);
+                bool isPositive = IsPositive(element);   
+                bool isUnique = IsUnique(i, elements);
+                bool isInMatrixSizeRange = IsInMatrixSizeRange(element, size);
 
                 if (!(isPositive && isUnique && isInMatrixSizeRange))
                 {
@@ -141,6 +108,20 @@ namespace MagicSquare
             return isNonEmptyMatrix;
         }
 
+        public static bool IsPositive(int element)
+        {
+            bool isPositive;
+            if (element > 0)
+            {
+                isPositive = true;
+            }
+            else 
+            {
+                isPositive = false;
+            }
+            return isPositive;
+        }
+        
         public static bool IsSquareMatrix(int[,] matrix)
         {
             int numRows = matrix.GetLength(0);
@@ -156,6 +137,25 @@ namespace MagicSquare
                 isSquareMatrix = false;
             }
             return isSquareMatrix;
+        }
+
+        public static bool IsUnique(int elementIndex, int[] elements)
+        {
+            bool isUnique = true;
+            bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length);
+
+            if (isValidIndex)
+            {
+                if (elements[elementIndex] != elements[elementIndex+1])
+                {
+                    isUnique = true;
+                }
+                else
+                {
+                    isUnique = false;
+                }
+            }
+            return isUnique;
         }
     }
 
