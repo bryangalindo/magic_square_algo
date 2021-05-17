@@ -57,13 +57,6 @@ namespace MagicSquare
             bool isNormalMatrix = true;
             while (isNormalMatrix)
             { 
-                bool isNonEmptyMatrix = IsNonEmptyMatrix(matrix);
-                if (!isNonEmptyMatrix)
-                {
-                    isNormalMatrix = false;
-                    break;
-                }
-
                 bool isSquare = IsSquareMatrix(matrix);
                 bool isDistinctPositiveInRange = ContainsUniquePositiveInRangeIntegers(matrix);
                 if (!(isSquare && isDistinctPositiveInRange))
@@ -117,20 +110,6 @@ namespace MagicSquare
                 isInRange = false;
             }
             return isInRange;
-        }
-
-        private static bool IsNonEmptyMatrix(int[,] matrix)
-        {
-            bool isNonEmptyMatrix;
-            if (matrix.Length > 0)
-            {
-                isNonEmptyMatrix = true;
-            }
-            else
-            {
-                isNonEmptyMatrix = false;
-            }
-            return isNonEmptyMatrix;
         }
         
         private static bool IsPositive(int element)
@@ -236,20 +215,6 @@ namespace MagicSquare
             return isNormalMagicSquare;
         }
 
-        private int[][] GetAscendingDiagonalCoordinates()
-        {
-            int[][] ascendingDiagonalCoordinates = new int[numRows][];
-            int j = numRows - 1;
-
-            for (int i = 0; i < numRows; i++)
-            {
-                int[] coordinate = new int[] {i,j};
-                ascendingDiagonalCoordinates[i] = coordinate;
-                j--;
-            }
-            return ascendingDiagonalCoordinates;
-        }
-
         private int GetDescendingDiagonalSum()
         {
 
@@ -268,11 +233,12 @@ namespace MagicSquare
 
         private int GetAscendingDiagonalSum()
         {
-            int[][] diagonalCoordinates = GetAscendingDiagonalCoordinates();
-
-            foreach (int[] coordinate in diagonalCoordinates)
+            for (int i = 0; i < numRows; i++)
             {
-                ascendingDiagonalSum += matrixObj[coordinate[0], coordinate[1]];
+                for (int j = numColumns - 1; j >= 0; j--)
+                {
+                    ascendingDiagonalSum += matrixObj[i, j];
+                }
             }
             return ascendingDiagonalSum;
         }
@@ -281,7 +247,7 @@ namespace MagicSquare
         {
             for (int i = 0; i < numColumns; i++)
             {
-                int element = matrixObj[0, i];
+                int element = matrixObj[0, i]; // Retrieving sum of first row
                 magicConstant += element;
             }
             return magicConstant;
