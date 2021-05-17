@@ -9,7 +9,7 @@ namespace MagicSquare
             int numRows = matrix.GetLength(0);
             int numColumns = matrix.GetLength(1);
             int size = numRows * numColumns;
-            int matrixIndex = 0;
+            int arrayIndex = 0;
 
             int[] array = new int[size];
 
@@ -18,44 +18,11 @@ namespace MagicSquare
                 for (int j = 0; j < numColumns; j++)
                 {
                     int element = matrix[i,j];
-                    array[matrixIndex] = element;
-                    matrixIndex++;
+                    array[arrayIndex] = element;
+                    arrayIndex++;
                 }
             }
             return array;
-        }
-
-        public static bool IsPositive(int element)
-        {
-            bool isPositive;
-            if (element > 0)
-            {
-                isPositive = true;
-            }
-            else 
-            {
-                isPositive = false;
-            }
-            return isPositive;
-        }
-
-        public static bool IsUnique(int elementIndex, int[] elements)
-        {
-            bool isUnique = true;
-            bool isValidIndex = IsValidIndex(elementIndex, elements.Length);
-
-            if (isValidIndex)
-            {
-                if (elements[elementIndex] != elements[elementIndex+1])
-                {
-                    isUnique = true;
-                }
-                else
-                {
-                    isUnique = false;
-                }
-            }
-            return isUnique;
         }
 
         public static bool IsValidIndex(int elementIndex, int arraySize)
@@ -96,11 +63,11 @@ namespace MagicSquare
             {
                 int element = elements[i];
 
-                bool isPositive = Helper.IsPositive(element);   
-                bool isUnique = Helper.IsUnique(i, elements);
-                bool isInMatrixSizeRange = Normalize.IsInMatrixSizeRange(element, size);
+                bool isPositive = IsPositive(element);   
+                bool isUnique = IsUnique(i, elements);
+                bool isInRange = IsInRange(element, size);
 
-                if (!(isPositive && isUnique && isInMatrixSizeRange))
+                if (!(isPositive && isUnique && isInRange))
                 {
                     containsUniquePositiveInRangeIntegers = false;
                     break;
@@ -113,18 +80,18 @@ namespace MagicSquare
             return containsUniquePositiveInRangeIntegers;
         }
 
-        public static bool IsInMatrixSizeRange(int element, int matrixSize)
+        public static bool IsInRange(int element, int matrixSize)
         {
-            bool isInMatrixSizeRange;
+            bool isInRange;
             if (element <= matrixSize)
             {
-                isInMatrixSizeRange = true;
+                isInRange = true;
             }
             else
             {
-                isInMatrixSizeRange = false;
+                isInRange = false;
             }
-            return isInMatrixSizeRange;
+            return isInRange;
         }
 
         public static bool IsNonEmptyMatrix (int[,] matrix)
@@ -141,6 +108,20 @@ namespace MagicSquare
             return isNonEmptyMatrix;
         }
 
+        public static bool IsPositive(int element)
+        {
+            bool isPositive;
+            if (element > 0)
+            {
+                isPositive = true;
+            }
+            else 
+            {
+                isPositive = false;
+            }
+            return isPositive;
+        }
+        
         public static bool IsSquareMatrix(int[,] matrix)
         {
             int numRows = matrix.GetLength(0);
@@ -156,6 +137,25 @@ namespace MagicSquare
                 isSquareMatrix = false;
             }
             return isSquareMatrix;
+        }
+
+        public static bool IsUnique(int elementIndex, int[] elements)
+        {
+            bool isUnique = true;
+            bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length);
+
+            if (isValidIndex)
+            {
+                if (elements[elementIndex] != elements[elementIndex+1])
+                {
+                    isUnique = true;
+                }
+                else
+                {
+                    isUnique = false;
+                }
+            }
+            return isUnique;
         }
     }
 
