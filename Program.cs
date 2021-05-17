@@ -27,12 +27,8 @@ namespace MagicSquare
 
         public static bool IsValidIndex(int elementIndex, int arraySize)
         {
-            bool isValidIndex;
-            if (elementIndex < arraySize - 1)
-            {
-                isValidIndex = true;
-            }
-            else
+            bool isValidIndex = true;
+            if (elementIndex >= arraySize - 1)
             {
                 isValidIndex = false;
             }
@@ -90,22 +86,14 @@ namespace MagicSquare
                     containsUniquePositiveInRangeIntegers = false;
                     break;
                 }
-                else
-                {
-                    containsUniquePositiveInRangeIntegers = true;
-                }
             }
             return containsUniquePositiveInRangeIntegers;
         }
 
         private static bool IsInRange(int element, int matrixSize)
         {
-            bool isInRange;
-            if (element <= matrixSize)
-            {
-                isInRange = true;
-            }
-            else
+            bool isInRange = true;
+            if (element > matrixSize)
             {
                 isInRange = false;
             }
@@ -114,12 +102,8 @@ namespace MagicSquare
         
         private static bool IsPositive(int element)
         {
-            bool isPositive;
-            if (element > 0)
-            {
-                isPositive = true;
-            }
-            else 
+            bool isPositive = true;
+            if (element <= 0)
             {
                 isPositive = false;
             }
@@ -131,12 +115,8 @@ namespace MagicSquare
             int numRows = matrix.GetLength(0);
             int numColumns = matrix.GetLength(1);
 
-            bool isSquareMatrix;
-            if(numRows == numColumns)
-            {
-                isSquareMatrix = true;
-            }
-            else
+            bool isSquareMatrix = true;
+            if(numRows != numColumns)
             {
                 isSquareMatrix = false;
             }
@@ -150,11 +130,7 @@ namespace MagicSquare
 
             if (isValidIndex)
             {
-                if (elements[elementIndex] != elements[elementIndex+1])
-                {
-                    isUnique = true;
-                }
-                else
+                if (elements[elementIndex] == elements[elementIndex+1])
                 {
                     isUnique = false;
                 }
@@ -203,9 +179,9 @@ namespace MagicSquare
                     break;
                 }
 
-                int allRowsum = GetSumOfAllRowsOrAllColumns(0);
+                int allRowSum = GetSumOfAllRowsOrAllColumns(0);
                 int allColumnSum = GetSumOfAllRowsOrAllColumns(1);
-                if (((allColumnSum / numColumns) != magicConstant) || ((allRowsum / numRows) != magicConstant))
+                if (((allColumnSum / numColumns) != magicConstant) || ((allRowSum / numRows) != magicConstant))
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -235,9 +211,10 @@ namespace MagicSquare
         {
             for (int i = 0; i < numRows; i++)
             {
-                for (int j = numColumns - 1; j >= 0; j--)
+                for (int j = numColumns - 1; j >= 0;)
                 {
                     ascendingDiagonalSum += matrixObj[i, j];
+                    j--; // Moved decrement inside the loop to avoid unreachable code linter message
                     break;
                 }
             }
