@@ -9,7 +9,7 @@ namespace MagicSquare
             int numRows = matrix.GetLength(0);
             int numColumns = matrix.GetLength(1);
             int size = numRows * numColumns;
-            int matrixIndex = 0;
+            int arrayIndex = 0;
 
             int[] array = new int[size];
 
@@ -18,8 +18,8 @@ namespace MagicSquare
                 for (int j = 0; j < numColumns; j++)
                 {
                     int element = matrix[i,j];
-                    array[matrixIndex] = element;
-                    matrixIndex++;
+                    array[arrayIndex] = element;
+                    arrayIndex++;
                 }
             }
             return array;
