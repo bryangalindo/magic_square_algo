@@ -143,6 +143,7 @@ namespace MagicSquare
         private int magicConstant = 0;
         private int descendingDiagonalSum = 0;
         private int ascendingDiagonalSum = 0;
+        private int firstRowIndex = 0;
         private int numRows;
         private int numColumns;
         private int size;
@@ -223,7 +224,7 @@ namespace MagicSquare
         {
             for (int i = 0; i < numColumns; i++)
             {
-                int element = matrixObj[0, i]; // Retrieving sum of first row
+                int element = matrixObj[firstRowIndex, i]; // Retrieving sum of first row
                 magicConstant += element;
             }
             return magicConstant;
@@ -254,7 +255,7 @@ namespace MagicSquare
         public static int[,] nonUniqueElementInMatrix = new int[,] { {2, 7, 6}, {9, 1, 1}, {4, 3, 8} };
         public static int[,] outOfRangeElementInMatrix = new int[,] { {2, 7, 6}, {9, 1, 10}, {4, 3, 8} };
 
-        public static void TestMatrix(int [,] matrix)
+        public static void TestMatrix(int[,] matrix)
         {
             bool isNonNullNonEmptyMatrix = Helper.IsNonEmptyNonNullMatrix(matrix);
             if (isNonNullNonEmptyMatrix)
