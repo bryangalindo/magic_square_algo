@@ -9,7 +9,7 @@ An algorithm that determines whether a matrix is a normal magic square.
 <img alt="Magic Sqaure" width="300" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Magicsquareexample.svg/1024px-Magicsquareexample.svg.png"/>
 
 ## Setup
-1. From the [MagicSquare](https://github.com/bryangalindo/magicsquare) repository, click **Program.cs**.
+1. From the [MagicSquare](https://github.com/bryangalindo/magicsquare) repository, click **DotNetFiddleTest.txt**.
     1. Click **Raw**.
     2. Press **CTRL + A** on the keyboard, and press **CTRL + C** to copy to the clipboard.
 4. Navigate to [.NET Fiddle](https://dotnetfiddle.net/ ".NET Fiddle").
