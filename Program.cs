@@ -39,13 +39,14 @@ namespace MagicSquare
             return isValidIndex;
         }
 
-        public static int[,] ConvertNullMatrixToEmptyMatrix(int[,] matrix)
+        public static bool IsNonEmptyNonNullMatrix(int[,] matrix)
         {
-            if (matrix == null)
+            bool isNonEmptyNonNullMatrix = true;
+            if (matrix == null || matrix.Length == 0)
             {
-                matrix = new int[,] {};
+                isNonEmptyNonNullMatrix = false;
             }
-            return matrix;
+            return isNonEmptyNonNullMatrix;
         }
     }
 
@@ -166,7 +167,7 @@ namespace MagicSquare
         private static bool IsUnique(int elementIndex, int[] elements)
         {
             bool isUnique = true;
-            bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length);
+            bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length); // Prevents IndexOutOfRangeException error
 
             if (isValidIndex)
             {
@@ -195,7 +196,6 @@ namespace MagicSquare
 
         public Matrix(int[,] matrix)
         {   
-            matrix = Helper.ConvertNullMatrixToEmptyMatrix(matrix);
             matrixObj = matrix;
             numRows = matrix.GetLength(0);
             numColumns = matrix.GetLength(1);
@@ -314,9 +314,17 @@ namespace MagicSquare
 
         public static void TestMatrix(int [,] matrix)
         {
-            Matrix matrixObj = new Matrix(matrix);
-            bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
-            System.Console.WriteLine(isNormalMagicSquare);
+            bool isNonNullNonEmptyMatrix = Helper.IsNonEmptyNonNullMatrix(matrix);
+            if (isNonNullNonEmptyMatrix)
+            {
+                Matrix matrixObj = new Matrix(matrix);
+                bool isNormalMagicSquare = matrixObj.IsNormalMagicSquare();
+                System.Console.WriteLine(isNormalMagicSquare);
+            }
+            else
+            {
+                System.Console.WriteLine("Matrix is either null or empty. Please submit a valid matrix.");
+            }
         }
 
         public static void EmptyMatrixCase()
