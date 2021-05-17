@@ -140,10 +140,11 @@ namespace MagicSquare
 
     public class Matrix
     {
-        private int magicConstant = 0;
         private int descendingDiagonalSum = 0;
         private int ascendingDiagonalSum = 0;
-        private int firstRowIndex = 0;
+        private int rowSum = 0;
+        private int columnSum = 0;
+        private int magicConstant;
         private int numRows;
         private int numColumns;
         private int size;
@@ -155,6 +156,7 @@ namespace MagicSquare
             numRows = matrix.GetLength(0);
             numColumns = matrix.GetLength(1);
             size = numRows * numColumns;
+            magicConstant = numRows * (size + 1) / 2;
         }
 
         public bool IsNormalMagicSquare()
@@ -169,8 +171,6 @@ namespace MagicSquare
                     break;
                 }
 
-                int magicConstant = GetMagicConstant();
-
                 int ascendingDiagonalSum = GetAscendingDiagonalSum();
                 int descendingDiagonalSum = GetDescendingDiagonalSum();
                 if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
@@ -179,9 +179,8 @@ namespace MagicSquare
                     break;
                 }
 
-                int allRowSum = GetSumOfAllRowsOrAllColumns(0);
-                int allColumnSum = GetSumOfAllRowsOrAllColumns(1);
-                if (((allColumnSum / numColumns) != magicConstant) || ((allRowSum / numRows) != magicConstant))
+                bool allRowsAllColumnsEqualMagicConstant = AllRowsAllColumnsEqualMagicConstant();
+                if (!allRowsAllColumnsEqualMagicConstant)
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -213,34 +212,32 @@ namespace MagicSquare
                 for (int j = numColumns - 1; j >= 0;)
                 {
                     ascendingDiagonalSum += matrixObj[i, j];
-                    j--; // Moved decrement inside the loop to avoid unreachable code linter message
+                    j--; // Moved decrement inside the loop to avoid "unreachable code" linter message
                     break;
                 }
             }
             return ascendingDiagonalSum;
-        }
+        } 
 
-        private int GetMagicConstant()
-        {
-            for (int i = 0; i < numColumns; i++)
-            {
-                int element = matrixObj[firstRowIndex, i]; // Retrieving sum of first row
-                magicConstant += element;
-            }
-            return magicConstant;
-        }
-
-        private int GetSumOfAllRowsOrAllColumns(int sumType)
+        private bool AllRowsAllColumnsEqualMagicConstant()
         {      
-            int sum = 0;
+            bool allRowsAllColumnsEqualMagicConstant = true;
             for (int i = 0; i < numRows; i++)
             {   
                 for (int j = 0; j < numColumns; j++)
                 {   
-                    sum = (sumType == 0) ? sum + matrixObj[i,j] : sum + matrixObj[j,i];
+                    rowSum += matrixObj[i,j];
+                    columnSum += matrixObj[j,i];
                 }
+                if (!(rowSum == magicConstant) || !(columnSum == magicConstant))
+                {
+                    allRowsAllColumnsEqualMagicConstant = false;
+                    break;
+                }
+                rowSum = 0; // Resets sum for next row
+                columnSum = 0; // Resets sum for next column
             }
-            return sum;
+            return allRowsAllColumnsEqualMagicConstant;
          }     
     }
 
@@ -270,45 +267,14 @@ namespace MagicSquare
             }
         }
 
-        public static void EmptyMatrixCase()
-        {
-            TestMatrix(emptyMatrix);
-        }
-
-        public static void ValidMatrixCase()
-        {
-            TestMatrix(validMatrix);
-        }
-
-        public static void NullMatrixCase()
-        {
-            TestMatrix(nullMatrix);
-        }
-
-        public static void NegativeElementInMatrixCase()
-        {
-            TestMatrix(negativeElementInMatrix);
-        }
-
-        public static void NonSquareMatrixCase()
-        {
-            TestMatrix(nonSquareMatrix);
-        }
-
-        public static void ZeroElementInMatrix()
-        {
-            TestMatrix(zeroElementInMatrix);
-        }
-
-        public static void NonUniqueElementInMatrixCase()
-        {
-            TestMatrix(nonUniqueElementInMatrix);
-        }
-
-        public static void OutOfRangeElementInMatrixCase()
-        {
-            TestMatrix(outOfRangeElementInMatrix);
-        }
+        public static void EmptyMatrixCase() { TestMatrix(emptyMatrix); }
+        public static void ValidMatrixCase() { TestMatrix(validMatrix); }
+        public static void NullMatrixCase() { TestMatrix(nullMatrix); }
+        public static void NegativeElementInMatrixCase() { TestMatrix(negativeElementInMatrix); }
+        public static void NonSquareMatrixCase() { TestMatrix(nonSquareMatrix); }
+        public static void ZeroElementInMatrix() { TestMatrix(zeroElementInMatrix); }
+        public static void NonUniqueElementInMatrixCase() { TestMatrix(nonUniqueElementInMatrix); }
+        public static void OutOfRangeElementInMatrixCase() { TestMatrix(outOfRangeElementInMatrix); }
     }
 
     class Program
