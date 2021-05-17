@@ -39,7 +39,7 @@ namespace MagicSquare
             return isValidIndex;
         }
 
-        public static int[,] ConvertNullMatrixToEmpty(int[,] matrix)
+        public static int[,] ConvertNullMatrixToEmptyMatrix(int[,] matrix)
         {
             if (matrix == null)
             {
@@ -51,7 +51,31 @@ namespace MagicSquare
 
     public class Normalize
     {
-        public static bool ContainsUniquePositiveInRangeIntegers(int[,] matrix)
+        public static bool IsNormalMatrix(int[,] matrix)
+        {
+            bool isNormalMatrix = true;
+            while (isNormalMatrix)
+            { 
+                bool isNonEmptyMatrix = IsNonEmptyMatrix(matrix);
+                if (!isNonEmptyMatrix)
+                {
+                    isNormalMatrix = false;
+                    break;
+                }
+
+                bool isSquare = IsSquareMatrix(matrix);
+                bool isDistinctPositiveInRange = ContainsUniquePositiveInRangeIntegers(matrix);
+                if (!(isSquare && isDistinctPositiveInRange))
+                {
+                    isNormalMatrix = false;
+                    break;
+                }
+                break;
+            }
+            return isNormalMatrix;
+        }
+
+        private static bool ContainsUniquePositiveInRangeIntegers(int[,] matrix)
         {   
             bool containsUniquePositiveInRangeIntegers = true;
             int size = matrix.GetLength(0) * matrix.GetLength(1);
@@ -80,7 +104,7 @@ namespace MagicSquare
             return containsUniquePositiveInRangeIntegers;
         }
 
-        public static bool IsInRange(int element, int matrixSize)
+        private static bool IsInRange(int element, int matrixSize)
         {
             bool isInRange;
             if (element <= matrixSize)
@@ -94,7 +118,7 @@ namespace MagicSquare
             return isInRange;
         }
 
-        public static bool IsNonEmptyMatrix (int[,] matrix)
+        private static bool IsNonEmptyMatrix(int[,] matrix)
         {
             bool isNonEmptyMatrix;
             if (matrix.Length > 0)
@@ -107,8 +131,8 @@ namespace MagicSquare
             }
             return isNonEmptyMatrix;
         }
-
-        public static bool IsPositive(int element)
+        
+        private static bool IsPositive(int element)
         {
             bool isPositive;
             if (element > 0)
@@ -122,7 +146,7 @@ namespace MagicSquare
             return isPositive;
         }
         
-        public static bool IsSquareMatrix(int[,] matrix)
+        private static bool IsSquareMatrix(int[,] matrix)
         {
             int numRows = matrix.GetLength(0);
             int numColumns = matrix.GetLength(1);
@@ -139,7 +163,7 @@ namespace MagicSquare
             return isSquareMatrix;
         }
 
-        public static bool IsUnique(int elementIndex, int[] elements)
+        private static bool IsUnique(int elementIndex, int[] elements)
         {
             bool isUnique = true;
             bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length);
@@ -162,6 +186,8 @@ namespace MagicSquare
     public class Matrix
     {
         private int magicConstant = 0;
+        private int descendingDiagonalSum = 0;
+        private int ascendingDiagonalSum = 0;
         private int numRows;
         private int numColumns;
         private int size;
@@ -169,7 +195,7 @@ namespace MagicSquare
 
         public Matrix(int[,] matrix)
         {   
-            matrix = Helper.ConvertNullMatrixToEmpty(matrix);
+            matrix = Helper.ConvertNullMatrixToEmptyMatrix(matrix);
             matrixObj = matrix;
             numRows = matrix.GetLength(0);
             numColumns = matrix.GetLength(1);
@@ -181,34 +207,26 @@ namespace MagicSquare
             bool isNormalMagicSquare = true;
             while (isNormalMagicSquare)
             { 
-                bool isNonEmptyMatrix = Normalize.IsNonEmptyMatrix(this.matrixObj);
-                if (!isNonEmptyMatrix)
+                bool isNormalMatrix = Normalize.IsNormalMatrix(matrixObj);
+                if (!isNormalMatrix)
                 {
                     isNormalMagicSquare = false;
                     break;
                 }
 
-                bool isSquare = Normalize.IsSquareMatrix(this.matrixObj);
-                bool isDistinctPositiveInRange = Normalize.ContainsUniquePositiveInRangeIntegers(this.matrixObj);
-                if (!(isSquare && isDistinctPositiveInRange))
-                {
-                    isNormalMagicSquare = false;
-                    break;
-                }
+                int magicConstant = GetMagicConstant();
 
-                int magicConstant = this.GetMagicConstant();
-
-                int ascendingDiagonalSum = this.GetDiagonalSum(0);
-                int descendingDiagonalSum = this.GetDiagonalSum(1);
+                int ascendingDiagonalSum = GetAscendingDiagonalSum();
+                int descendingDiagonalSum = GetDescendingDiagonalSum();
                 if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
                 {
                     isNormalMagicSquare = false;
                     break;
                 }
 
-                int allRowsum = this.GetSumOfAllRowsOrAllColumns(0);
-                int allColumnSum = this.GetSumOfAllRowsOrAllColumns(1);
-                if (((allColumnSum / this.numColumns) != magicConstant) || ((allRowsum / this.numRows) != magicConstant))
+                int allRowsum = GetSumOfAllRowsOrAllColumns(0);
+                int allColumnSum = GetSumOfAllRowsOrAllColumns(1);
+                if (((allColumnSum / numColumns) != magicConstant) || ((allRowsum / numRows) != magicConstant))
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -220,7 +238,7 @@ namespace MagicSquare
 
         private int[][] GetAscendingDiagonalCoordinates()
         {
-            int[][] ascendingDiagonalCoordinates = new int[this.numRows][];
+            int[][] ascendingDiagonalCoordinates = new int[numRows][];
             int j = numRows - 1;
 
             for (int i = 0; i < numRows; i++)
@@ -232,35 +250,38 @@ namespace MagicSquare
             return ascendingDiagonalCoordinates;
         }
 
-        private int[][] GetDescendingDiagonalCoordinates()
+        private int GetDescendingDiagonalSum()
         {
-            int[][] descendingDiagonalCoordinates = new int[this.numRows][];
 
-            for (int i = 0; i < this.numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {
-                int[] coordinate = new int[] {i,i};
-                descendingDiagonalCoordinates[i] = coordinate;
+                for (int j = 0; j < numColumns; j++)
+                {
+                    if (i == j)
+                    {
+                        descendingDiagonalSum += matrixObj[i, j];
+                    }
+                }
             }
-            return descendingDiagonalCoordinates;
+            return descendingDiagonalSum;
         }
 
-        private int GetDiagonalSum(int diagonalType)
+        private int GetAscendingDiagonalSum()
         {
-            int diagonalSum = 0;
-            int[][] diagonalCoordinates = (diagonalType == 0) ? this.GetAscendingDiagonalCoordinates() : this.GetDescendingDiagonalCoordinates();
+            int[][] diagonalCoordinates = GetAscendingDiagonalCoordinates();
 
             foreach (int[] coordinate in diagonalCoordinates)
             {
-                diagonalSum += this.matrixObj[coordinate[0], coordinate[1]];
+                ascendingDiagonalSum += matrixObj[coordinate[0], coordinate[1]];
             }
-            return diagonalSum;
+            return ascendingDiagonalSum;
         }
 
         private int GetMagicConstant()
         {
-            for (int i = 0; i < this.numColumns; i++)
+            for (int i = 0; i < numColumns; i++)
             {
-                int element = this.matrixObj[0, i];
+                int element = matrixObj[0, i];
                 magicConstant += element;
             }
             return magicConstant;
@@ -269,11 +290,11 @@ namespace MagicSquare
         private int GetSumOfAllRowsOrAllColumns(int sumType)
         {      
             int sum = 0;
-            for (int i = 0; i < this.numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {   
-                for (int j = 0; j < this.numColumns; j++)
+                for (int j = 0; j < numColumns; j++)
                 {   
-                    sum = (sumType == 0) ? sum + this.matrixObj[i,j] : sum +this.matrixObj[j,i];
+                    sum = (sumType == 0) ? sum + matrixObj[i,j] : sum + matrixObj[j,i];
                 }
             }
             return sum;
