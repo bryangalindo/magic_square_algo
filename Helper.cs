@@ -23,6 +23,16 @@ namespace MagicSquare
             return array;
         }
 
+        public static bool CheckSumsEqualToConstant(int rowSum, int columnSum, int constant)
+        {
+            bool sumsEqualToConstant = true;
+            if ((rowSum != constant) || (columnSum != constant))
+            {
+                sumsEqualToConstant = false;
+            }
+            return sumsEqualToConstant;
+        }
+
         public static bool IsValidIndex(int elementIndex, int arraySize)
         {
             bool isValidIndex = true;
