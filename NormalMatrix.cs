@@ -2,23 +2,23 @@ using System;
 
 namespace MagicSquare
 {
-    public class Normalize
+    public class NormalMatrix
     {
-        public static bool IsNormalMatrix(int[,] matrix)
+        public static bool IsNormal(int[,] matrix)
         {
-            bool isNormalMatrix = true;
-            while (isNormalMatrix)
+            bool isNormal = true;
+            while (isNormal)
             { 
                 bool isSquare = IsSquareMatrix(matrix);
                 bool isDistinctPositiveInRange = ContainsUniquePositiveInRangeIntegers(matrix);
                 if (!(isSquare && isDistinctPositiveInRange))
                 {
-                    isNormalMatrix = false;
+                    isNormal = false;
                     break;
                 }
                 break;
             }
-            return isNormalMatrix;
+            return isNormal;
         }
 
         private static bool ContainsUniquePositiveInRangeIntegers(int[,] matrix)

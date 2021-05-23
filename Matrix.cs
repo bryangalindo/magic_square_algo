@@ -26,8 +26,8 @@ namespace MagicSquare
             bool isNormalMagicSquare = true;
             while (isNormalMagicSquare)
             { 
-                bool isNormalMatrix = Normalize.IsNormalMatrix(matrixObj);
-                if (!isNormalMatrix)
+                bool isNormal = NormalMatrix.IsNormal(matrixObj);
+                if (!isNormal)
                 {
                     isNormalMagicSquare = false;
                     break;
@@ -92,12 +92,13 @@ namespace MagicSquare
                     columnSum += matrixObj[j,i];
                 }
 
-                if ((rowSum != magicConstant) || (columnSum != magicConstant))
+                bool checkSumsEqualMagicConstant = Helper.CheckSumsEqualToConstant(rowSum, columnSum, magicConstant);
+                if (!checkSumsEqualMagicConstant)
                 {
                     allRowsAllColumnsEqualMagicConstant = false;
                     break;
                 }
-                
+
                 rowSum = 0; // Resets sum for next row
                 columnSum = 0; // Resets sum for next column
             }
