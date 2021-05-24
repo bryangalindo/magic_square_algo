@@ -20,6 +20,7 @@ namespace MagicSquare
                     arrayIndex++;
                 }
             }
+            
             return array;
         }
 
@@ -43,14 +44,31 @@ namespace MagicSquare
             return isValidIndex;
         }
 
-        public static bool IsNonEmptyNonNullMatrix(int[,] matrix)
+        public static bool IsNonEmptyNonNullSquareMatrix(int[,] matrix)
         {
-            bool isNonEmptyNonNullMatrix = true;
-            if (matrix == null || matrix.Length == 0)
+            bool isNonEmptyNonNullSquareMatrix = true;
+
+            while (isNonEmptyNonNullSquareMatrix)
             {
-                isNonEmptyNonNullMatrix = false;
+                if ((matrix == null) || (matrix.Length == 0))
+                {
+                    isNonEmptyNonNullSquareMatrix = false;
+                    break;
+                }
+
+                int numRows = matrix.GetLength(0);
+                int numColumns = matrix.GetLength(1);
+
+                if (numRows != numColumns)
+                {
+                    isNonEmptyNonNullSquareMatrix = false;
+                    break;
+                }
+                
+                break;
             }
-            return isNonEmptyNonNullMatrix;
+
+            return isNonEmptyNonNullSquareMatrix;
         }
     }
 }
