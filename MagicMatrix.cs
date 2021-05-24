@@ -19,19 +19,24 @@ namespace MagicSquare
             
             while (isMagicMatrix)
             {
-                int ascendingDiagonalSum = this.GetAscendingDiagonalSum();
-                int descendingDiagonalSum = this.GetDescendingDiagonalSum();
-
-                if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
+                bool isSquareMatrix = base.IsSquareMatrix();
+                if(!isSquareMatrix)
                 {
                     isMagicMatrix = false;
                     break;
                 }
 
                 bool rowsColumnsEqualMagicConstant = this.ContainsRowsColumnsEqualToMagicConstant();
-                bool isSquareMatrix = base.IsSquareMatrix();
+                if (!(rowsColumnsEqualMagicConstant))
+                {
+                    isMagicMatrix = false;
+                    break;
+                }
 
-                if (!(rowsColumnsEqualMagicConstant && isSquareMatrix))
+                int ascendingDiagonalSum = this.GetAscendingDiagonalSum();
+                int descendingDiagonalSum = this.GetDescendingDiagonalSum();
+
+                if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
                 {
                     isMagicMatrix = false;
                     break;
