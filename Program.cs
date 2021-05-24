@@ -11,6 +11,7 @@
             Test.NegativeElementInMatrixCase();
             Test.NonUniqueElementInMatrixCase();
             Test.OutOfRangeElementInMatrixCase();
+            Test.ZeroElementInMatrix();
         }
     }
 }

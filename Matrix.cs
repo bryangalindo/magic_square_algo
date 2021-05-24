@@ -14,5 +14,17 @@ namespace MagicSquare
             this.numColumns = matrix.GetLength(1);
             this.Size = this.numRows * this.numColumns;
         }
+
+        public bool IsSquareMatrix()
+        {
+            bool isSquareMatrix = true;
+
+            if (this.numRows != this.numColumns)
+            {
+                isSquareMatrix = false;
+            }
+            
+            return isSquareMatrix;
+        }
     }
 }

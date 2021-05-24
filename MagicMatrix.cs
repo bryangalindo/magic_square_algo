@@ -2,11 +2,11 @@ namespace MagicSquare
 {
     public class MagicMatrix : Matrix
     {
-        internal int descendingDiagonalSum = 0;
-        internal int ascendingDiagonalSum = 0;
-        internal int rowSum = 0;
-        internal int columnSum = 0;
-        internal int magicConstant;
+        private int descendingDiagonalSum = 0;
+        private int ascendingDiagonalSum = 0;
+        private int rowSum = 0;
+        private int columnSum = 0;
+        private int magicConstant;
 
         public MagicMatrix(int[,] matrix) : base(matrix)
         {
@@ -18,12 +18,25 @@ namespace MagicSquare
             bool isMagicMatrix = true;
             
             while (isMagicMatrix)
-            { 
+            {
+                bool isSquareMatrix = base.IsSquareMatrix();
+                if(!isSquareMatrix)
+                {
+                    isMagicMatrix = false;
+                    break;
+                }
+
+                bool rowsColumnsEqualMagicConstant = this.ContainsRowsColumnsEqualToMagicConstant();
+                if (!(rowsColumnsEqualMagicConstant))
+                {
+                    isMagicMatrix = false;
+                    break;
+                }
+
                 int ascendingDiagonalSum = this.GetAscendingDiagonalSum();
                 int descendingDiagonalSum = this.GetDescendingDiagonalSum();
-                bool ContainsRowsColumnsEqualToMagicConstant = this.ContainsRowsColumnsEqualToMagicConstant();
 
-                if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant) || (!ContainsRowsColumnsEqualToMagicConstant))
+                if ((descendingDiagonalSum != magicConstant) || (ascendingDiagonalSum != magicConstant))
                 {
                     isMagicMatrix = false;
                     break;
@@ -31,7 +44,6 @@ namespace MagicSquare
 
                 break;
             }
-
             return isMagicMatrix;
         }
 
@@ -66,7 +78,8 @@ namespace MagicSquare
 
         private bool ContainsRowsColumnsEqualToMagicConstant()
         {      
-            bool ContainsRowsColumnsEqualToMagicConstant = true;
+            bool containsRowsColumnsEqualToMagicConstant = true;
+
             for (int i = 0; i < base.numRows; i++)
             {   
                 for (int j = 0; j < base.numColumns; j++)
@@ -75,17 +88,18 @@ namespace MagicSquare
                     columnSum += base.matrix[j,i];
                 }
 
-                bool checkSumsEqualMagicConstant = Helper.CheckSumsEqualToConstant(rowSum, columnSum, magicConstant);
-                if (!checkSumsEqualMagicConstant)
+                bool rowColumnEqualMagicConstant = Helper.CheckSumsEqualToConstant(rowSum, columnSum, magicConstant);
+                if (!rowColumnEqualMagicConstant)
                 {
-                    ContainsRowsColumnsEqualToMagicConstant = false;
+                    containsRowsColumnsEqualToMagicConstant = false;
                     break;
                 }
 
                 rowSum = 0; // Resets sum for next row
                 columnSum = 0; // Resets sum for next column
             }
-            return ContainsRowsColumnsEqualToMagicConstant;
+
+            return containsRowsColumnsEqualToMagicConstant;
          }
     }
 }
