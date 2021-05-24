@@ -8,20 +8,13 @@ namespace MagicSquare
 
         public bool IsNormalMagicMatrix()
         {
+            bool isNormalMatrix = this.IsNormalMatrix();
+            bool isMagicMatrix = base.IsMagicMatrix();
             bool isNormalMatrixMagicMatrix = true;
-            
-            while (isNormalMatrixMagicMatrix)
-            {
-                bool isNormalMatrix = this.IsNormalMatrix();
-                bool isMagicMatrix = base.IsMagicMatrix();
 
-                if(!(isNormalMatrix && isMagicMatrix))
-                {
-                    isNormalMatrixMagicMatrix = false;
-                    break;
-                }
-                
-                break;
+            if(!(isNormalMatrix && isMagicMatrix))
+            {
+                isNormalMatrixMagicMatrix = false;
             }
 
             return isNormalMatrixMagicMatrix;
@@ -30,46 +23,38 @@ namespace MagicSquare
         private bool IsNormalMatrix()
         {
             bool isNormalMatrix = true;
+            bool containsValidElements = this.ContainsUniquePositiveInRangeElements();
 
-            while (isNormalMatrix)
-            { 
-                bool isSquare = this.IsSquare();
-                bool isDistinctPositiveInRange = this.ContainsUniquePositiveInRangeIntegers();
-
-                if (!(isSquare && isDistinctPositiveInRange))
-                {
-                    isNormalMatrix = false;
-                    break;
-                }
-
-                break;
+            if (!containsValidElements)
+            {
+                isNormalMatrix = false;
             }
 
             return isNormalMatrix;
         }
 
-        private bool ContainsUniquePositiveInRangeIntegers()
+        private bool ContainsUniquePositiveInRangeElements()
         {   
             int[] elements = Helper.ConvertMatrixToArray(base.matrix);
             Array.Sort(elements);
 
-            bool containsUniquePositiveInRangeIntegers = true;
+            bool containsUniquePositiveInRangeElements = true;
 
             for (int i = 0; i < base.Size; i++)
             {
                 int element = elements[i];
 
                 bool isPositive = this.IsPositive(element);   
-                bool isUnique = this.IsUnique(i, elements);
                 bool isInRange = this.IsInRange(element);
+                bool isUnique = this.IsUnique(i, elements);
 
                 if (!(isPositive && isUnique && isInRange))
                 {
-                    containsUniquePositiveInRangeIntegers = false;
+                    containsUniquePositiveInRangeElements = false;
                     break;
                 }
             }
-            return containsUniquePositiveInRangeIntegers;
+            return containsUniquePositiveInRangeElements;
         }
 
         private bool IsInRange(int element)
@@ -96,18 +81,6 @@ namespace MagicSquare
             return isPositive;
         }
         
-        private bool IsSquare()
-        {
-            bool isSquare = true;
-
-            if(base.numRows != base.numColumns)
-            {
-                isSquare = false;
-            }
-
-            return isSquare;
-        }
-
         private bool IsUnique(int elementIndex, int[] elements)
         {
             bool isValidIndex = Helper.IsValidIndex(elementIndex, elements.Length); // Prevents IndexOutOfRangeException error

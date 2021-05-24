@@ -2,6 +2,18 @@ namespace MagicSquare
 {
     public class Helper
     {
+        public static bool CheckSumsEqualToConstant(int rowSum, int columnSum, int constant)
+        {
+            bool sumsEqualToConstant = true;
+
+            if ((rowSum != constant) || (columnSum != constant))
+            {
+                sumsEqualToConstant = false;
+            }
+
+            return sumsEqualToConstant;
+        }
+
         public static int[] ConvertMatrixToArray(int[,] matrix)
         {
             int numRows = matrix.GetLength(0);
@@ -24,51 +36,28 @@ namespace MagicSquare
             return array;
         }
 
-        public static bool CheckSumsEqualToConstant(int rowSum, int columnSum, int constant)
+        public static bool IsNonEmptyNonNullMatrix(int[,] matrix)
         {
-            bool sumsEqualToConstant = true;
-            if ((rowSum != constant) || (columnSum != constant))
+            bool isNonEmptyNonNullMatrix = true;
+
+            if ((matrix == null) || (matrix.Length == 0))
             {
-                sumsEqualToConstant = false;
+                isNonEmptyNonNullMatrix = false;
             }
-            return sumsEqualToConstant;
+
+            return isNonEmptyNonNullMatrix;
         }
 
         public static bool IsValidIndex(int elementIndex, int arraySize)
         {
             bool isValidIndex = true;
+
             if (elementIndex >= arraySize - 1)
             {
                 isValidIndex = false;
             }
+
             return isValidIndex;
-        }
-
-        public static bool IsNonEmptyNonNullSquareMatrix(int[,] matrix)
-        {
-            bool isNonEmptyNonNullSquareMatrix = true;
-
-            while (isNonEmptyNonNullSquareMatrix)
-            {
-                if ((matrix == null) || (matrix.Length == 0))
-                {
-                    isNonEmptyNonNullSquareMatrix = false;
-                    break;
-                }
-
-                int numRows = matrix.GetLength(0);
-                int numColumns = matrix.GetLength(1);
-
-                if (numRows != numColumns)
-                {
-                    isNonEmptyNonNullSquareMatrix = false;
-                    break;
-                }
-                
-                break;
-            }
-
-            return isNonEmptyNonNullSquareMatrix;
         }
     }
 }

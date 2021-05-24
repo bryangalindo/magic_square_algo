@@ -13,8 +13,8 @@ namespace MagicSquare
 
         public static void TestMatrix(int[,] matrix)
         {
-            bool isNonEmptyNonNullSquareMatrix = Helper.IsNonEmptyNonNullSquareMatrix(matrix);
-            if (isNonEmptyNonNullSquareMatrix)
+            bool isNonEmptyNonNullMatrix = Helper.IsNonEmptyNonNullMatrix(matrix);
+            if (isNonEmptyNonNullMatrix)
             {
                 var myMatrix = new NormalMagicMatrix(matrix);
                 bool isNormalMagicMatrix = myMatrix.IsNormalMagicMatrix();
@@ -22,7 +22,7 @@ namespace MagicSquare
             }
             else
             {
-                System.Console.WriteLine("Matrix is either null, empty, or non-square. Please submit a valid matrix.");
+                System.Console.WriteLine("Matrix is either null or empty. Please submit a valid matrix.");
             }
         }
 
